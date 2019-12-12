@@ -10,8 +10,8 @@
 
 #import "MiSearchBar.h"
 
-@interface MiSearchBar()<UITextFieldDelegate>{
-    
+@interface MiSearchBar()<UITextFieldDelegate>
+{
     
 }
 
@@ -21,7 +21,8 @@
 
 @implementation MiSearchBar
 
--(id)initWithFrame:(CGRect)frame placeholder:(NSString *)placeholder{
+-(id)initWithFrame:(CGRect)frame placeholder:(NSString *)placeholder
+{
     
     self = [super initWithFrame:frame];
     //self.tintColor = [UIColor colorWithRed:0.262 green:0.515 blue:1.000 alpha:1.000];
@@ -32,8 +33,8 @@
     
     int numberOfBlankCharacter = frame.size.width * 0.2;
     
-    for (int i = 0; i < numberOfBlankCharacter; i++) {   //根据searchBar的长度计算应该插入多少个空格占位
-        
+    for (int i = 0; i < numberOfBlankCharacter; i++)
+    {   //根据searchBar的长度计算应该插入多少个空格占位
         [blankString appendString:@" "];
     }
     
@@ -51,17 +52,18 @@
     return self;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
     [self.searchLabel setHidden:YES];
 
 }
 
 
-- (void)textFieldDidEndEditing:(UITextField *)textField{
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
     
-    if (textField.text.length == 0) {
-        
+    if (textField.text.length == 0)
+    {
         [self.searchLabel setHidden:NO];
     }
 }

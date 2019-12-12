@@ -88,13 +88,17 @@
     self.mainVC = [[MainViewController alloc] init];
     self.mainVC.app = [[myApp alloc] init];
     [self setUpDefaultUserSettings];
+    SingleCityForecastViewController *mainvc = [[SingleCityForecastViewController alloc] init];
+    self.window.rootViewController = mainvc;
+    
     myApp *app = [myApp getInstance];
-    self.mainVC = [[SingleCityForecastViewController alloc]init];
-    UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:self.mainVC];
-    app.mainVC = self.mainVC;
-    self.window.rootViewController = navigationController;
-    app.editSuscriptionsViewController = [[EditSuscriptionsViewController alloc]init];  
-    //[self setUpDefaultUserSettings];
+//    self.mainVC = [[SingleCityForecastViewController alloc]init];
+//    UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:self.mainVC];
+//    app.mainVC = self.mainVC;
+//    self.window.rootViewController = navigationController;
+//    [self.mainVC viewDidLoad];
+    app.editSuscriptionsViewController = [[EditSuscriptionsViewController alloc]init];
+//    //[self setUpDefaultUserSettings];
     
     
 }

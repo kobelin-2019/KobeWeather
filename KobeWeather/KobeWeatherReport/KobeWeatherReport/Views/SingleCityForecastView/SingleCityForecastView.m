@@ -10,8 +10,8 @@
 
 
 @implementation ReachableScrollView
-//拓展
-- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
     return YES;
 }
 
@@ -23,8 +23,10 @@
 
 @implementation SingleCityForecastView 
 
-- (ReachableScrollView *)scrollView {
-    if (!_scrollView) {
+- (ReachableScrollView *)scrollView
+{
+    if (!_scrollView)
+    {
         _scrollView = [[ReachableScrollView alloc] initWithFrame:self.bounds];
         _scrollView.clipsToBounds = NO;
         _scrollView.pagingEnabled = YES;
@@ -32,20 +34,25 @@
     return _scrollView;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         [self setupView];
     }
     return self;
 }
 
-- (void)setupView {
+- (void)setupView
+{
     [self addSubview:self.scrollView];
 }
 
-- (void)setActualWidth:(CGFloat)actualWidth {
-    if (actualWidth == 0) {
+- (void)setActualWidth:(CGFloat)actualWidth
+{
+    if (actualWidth == 0)
+    {
         return;
     }
     CGRect frame = self.scrollView.frame;
@@ -54,8 +61,10 @@
     self.scrollView.center = self.center;
 }
 
-- (void)setActualHeight:(CGFloat)actualHeight {
-    if (actualHeight == 0) {
+- (void)setActualHeight:(CGFloat)actualHeight
+{
+    if (actualHeight == 0)
+    {
         return;
     }
     CGRect frame = self.scrollView.frame;
@@ -64,7 +73,8 @@
     self.scrollView.center = self.center;
 }
 
-- (void)setContentSize:(CGSize)contentSize {
+- (void)setContentSize:(CGSize)contentSize
+{
     self.scrollView.contentSize = contentSize;
 }
 @end

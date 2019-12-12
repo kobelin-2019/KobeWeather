@@ -8,13 +8,11 @@
 
 #import "EditSuscriptionsViewController.h"
 #import "myApp.h"
-#import "UIKit/UIKit.h"
 @interface EditSuscriptionsViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 @property (nonatomic) BOOL isSearch;//判断是否在搜索
 @property BOOL haveInitArr;
 @property NSMutableArray *searhList;
 @end
-
 
 
 @implementation EditSuscriptionsViewController
@@ -216,10 +214,12 @@
         if(_arr[indexPath.row]!=nil&&[_arr[indexPath.row] length]!=1)
             [app.mySuscriptions insertObject:app.cityCodeMap[_arr[indexPath.row]] atIndex:0];
     }
-    [self.navigationController popViewControllerAnimated:YES];
-    [self.navigationController.topViewController viewDidLoad];
-    
-
+//    [self.navigationController popViewControllerAnimated:YES];
+//    [self.navigationController.topViewController viewDidLoad];
+//
+    [[self presentingViewController] viewDidLoad];
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
@@ -260,9 +260,6 @@
     self.isSearch = NO;
     [self.tableView reloadData];
 }
-
-
-
 
 
 - (void)didReceiveMemoryWarning {

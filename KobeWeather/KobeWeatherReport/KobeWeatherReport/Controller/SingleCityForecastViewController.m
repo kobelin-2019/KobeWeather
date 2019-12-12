@@ -11,7 +11,10 @@
 #import "EditSuscriptionsViewController.h"
 #import "myApp.h"
 #import "WeatherInfoGetter.h"
-#import "CardView.h"
+/*
+天气主页面：以卡片形式展示订阅的天气数据
+ */
+
 @interface SingleCityForecastViewController ()
 @property UIButton *cityNanageBtn;
 @property NSMutableArray *suscriptions;
@@ -19,25 +22,45 @@
 @property SingleCityForecastView *scrollView;
 @property NSMutableArray *cardViews;
 @property UIButton *refreshBtn;
+@property NSMutableArray *reverseCardViews;
+@property NSMutableArray *cardColor;
 @end
 
 @implementation SingleCityForecastViewController
-
+- (id)init
+{
+    self = [super init];
+    if(self)
+    {
+        [self viewDidLoad];
+    }
+    return self;
+}
++ (void)transitformShowView:(UIView *)view hiddenView:(UIView *)toView
+{
+    NSInteger indexView = [view.superview.subviews indexOfObject:view];
+    NSInteger indexToView = [toView.superview.subviews indexOfObject:toView];
+    [UIView beginAnimations:@"tranTwoViewAnimation" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:view.superview cache:YES];
+    [view.superview exchangeSubviewAtIndex:indexView withSubviewAtIndex:indexToView];
+    [UIView commitAnimations];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.weatherInfoGetter = [[WeatherInfoGetter alloc]init];
-    UIImageView *backGroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    UIImageView *backGroundImageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     UIImage *img = [UIImage imageNamed:@"background.jpg"];
     backGroundImageView.image = img;
-//    self.view = backGroundImageView;
     [self.view addSubview:backGroundImageView];
-    NSInteger barHeight = self.navigationController.navigationBar.frame.size.height;
-    self.cityNanageBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 45,barHeight+30,50 , 30)];
-    [self.cityNanageBtn setTitle:@"添加" forState:UIControlStateNormal];
+    self.cityNanageBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 40,30,27, 27)];
+    //[self.cityNanageBtn setTitle:@"添加" forState:UIControlStateNormal];
+    [self.cityNanageBtn setImage:[UIImage imageNamed:@"addCity.png"] forState:UIControlStateNormal];
+    [self.cityNanageBtn setImage:[UIImage imageNamed:@"addCity2.png"] forState:UIControlStateHighlighted];
     [self.cityNanageBtn setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
     [self.cityNanageBtn addTarget:self action:@selector(goEditSuscription) forControlEvents:UIControlEventTouchUpInside];
     [self loadWeatherData];
-    // Do any additional setup after loading the view.
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -49,47 +72,138 @@
     myApp *app = [myApp getInstance];
     self.suscriptions = app.mySuscriptions;
 
-    
-    CGSize cardSize = CGSizeMake(270, 360+120);
+    if(!self.cardColor)self.cardColor = [[NSMutableArray alloc] init];
+    CGSize cardSize = CGSizeMake(270, 360+120+50);
     NSInteger cardCount = self.suscriptions.count;
-    SingleCityForecastView *singleCityForecastView = [[SingleCityForecastView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20)];
-    [self.view addSubview:singleCityForecastView];
-    singleCityForecastView.actualWidth = cardSize.width;
-    singleCityForecastView.actualHeight = cardSize.height;
+    SingleCityForecastView *singleCityForecastView;
+        singleCityForecastView = [[SingleCityForecastView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20)];
+        [self.view addSubview:singleCityForecastView];
+        singleCityForecastView.actualWidth = cardSize.width;
+        singleCityForecastView.actualHeight = cardSize.height;
     self.scrollView = singleCityForecastView;
+    self.cardViews = [[NSMutableArray alloc] init];
+    self.reverseCardViews = [[NSMutableArray alloc]init];
     
-    
+    @autoreleasepool {
+        
     for (int i = 0; i < cardCount; i++) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(i * cardSize.width, 0, cardSize.width, cardSize.height)];
         
-
-        self.refreshBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 10,self.navigationController.navigationBar.frame.size.height+30+30 , 20, 20)];
+        self.refreshBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 10,30+25 , 20, 20)];
         [self.refreshBtn setImage:[UIImage imageNamed:@"shuaxin.png"] forState:UIControlStateNormal];
         [self.refreshBtn addTarget:self action:@selector(refreshAnimation:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.refreshBtn];
         
-        
         UIView *card = [[UIView alloc] initWithFrame:CGRectInset(view.bounds, 10, 10)];
         card.layer.cornerRadius = self.suscriptions.count;
         card.layer.masksToBounds = YES;
-        card.backgroundColor = [[self randomColor]colorWithAlphaComponent:0.4f];
+        if(i<_cardColor.count)
+        {
+            card.backgroundColor = _cardColor[i];
+        }
+        else
+        {
+            card.backgroundColor = [[self randomColor]colorWithAlphaComponent:0.4f];
+            [_cardColor addObject:card.backgroundColor];
+        }
+        
+        UIView *reverseView = [[UIView alloc] initWithFrame:card.frame];
+        reverseView.backgroundColor = card.backgroundColor;
+
+        
         [self.cardViews addObject:card];
+        [self.reverseCardViews addObject:reverseView];
+        reverseView.hidden = YES;
+        [view addSubview:reverseView];
         [view addSubview:card];
         [singleCityForecastView.scrollView addSubview:view];
+       
+        
         
         //利用网络获取到的天气数据加载到视图卡片中,（解析json数据）
         NSMutableDictionary *weatherInfoDictionary = [self.weatherInfoGetter getWeatherInfo:self.suscriptions[i]];
-       
-        
         NSDictionary *cityinfo = weatherInfoDictionary[@"cityInfo"];
         NSDictionary *weatherdata = weatherInfoDictionary[@"data"];
+        NSLog(@"%@",weatherInfoDictionary);
+        
+        int forcastViewHeight = reverseView.frame.size.height - 30;
+        int averageForecastViewHeight = (forcastViewHeight-30)/12.0;
+        int posy = 40;int posx = 0;
+        for(int i=1;i<13;i++)
+        {
+            NSDictionary *forecast = weatherdata[@"forecast"][i];
+            NSString * date = forecast[@"date"];
+            date = [date stringByAppendingString:@"日"];
+            NSString *highest = forecast[@"high"];
+            NSString *lowest = forecast[@"low"];
+            NSString *type = forecast[@"type"];
+            int ww = reverseView.frame.size.width/5;
+            int posx = 0;
+            UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
+            posx += ww;
+            dateLabel.text = date;
+            dateLabel.adjustsFontSizeToFitWidth = YES;
+            
+            UIImage *weatherIcon;
+            if([type containsString:@"晴"])
+            {
+                weatherIcon = [UIImage imageNamed:@"0.png"];
+            }
+            else if([type containsString:@"云"])
+            {
+                weatherIcon = [UIImage imageNamed:@"1.png"];
+            }
+            else if([type containsString:@"雨"])
+            {
+                weatherIcon = [UIImage imageNamed:@"2.png"];
+            }
+            else if([type containsString:@"雾"])
+            {
+                weatherIcon = [UIImage imageNamed:@"3.png"];
+            }
+            else if([type containsString:@"雪"])
+            {
+                weatherIcon = [UIImage imageNamed:@"4.png"];
+            }
+            else {
+                weatherIcon = [UIImage imageNamed:@"1.png"];
+            }
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
+            posx += ww;
+            UIImage *img = weatherIcon;
+            imgView.image = img;
+
+            UILabel *highestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
+            posx += ww;
+            highestLabel.text = highest;
+            highestLabel.adjustsFontSizeToFitWidth = YES;
+            
+            UILabel *lowestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
+            posx += ww;
+            lowestLabel.text = lowest;
+            lowestLabel.adjustsFontSizeToFitWidth = YES;
+            
+            UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
+            posx += ww;
+            typeLabel.text = type;
+            typeLabel.adjustsFontSizeToFitWidth = YES;
+          
+            dateLabel.textColor = [UIColor blackColor];
+            highestLabel.textColor = [UIColor blackColor];
+            lowestLabel.textColor = [UIColor blackColor];
+            typeLabel.textColor = [UIColor blackColor];
+            [reverseView addSubview:dateLabel];
+            [reverseView addSubview:highestLabel];
+            [reverseView addSubview:lowestLabel];
+            [reverseView addSubview:typeLabel];
+            [reverseView addSubview:imgView];
+            posy += averageForecastViewHeight;
+        }
+        
         
        /*
         forecast":[{"date":"10","high":"高温 19℃","low":"低温 11℃","ymd":"2019-12-10","week":"星期二","sunrise":"06:25","sunset":"17:06","aqi":39,"fx":"无持续风向","fl":"<3级","type":"晴","notice":"愿你拥有比阳光明媚的心情"}
         */
-        
-       
-        
         
         NSString *date = weatherInfoDictionary[@"date"];
         NSString *cityName = cityinfo[@"city"];
@@ -117,15 +231,16 @@
         
         UILabel *innerView = [[UILabel alloc] initWithFrame:CGRectInset(card.bounds ,20, 20)];
         
-        int posx = innerView.frame.origin.x;
-        int posy = innerView.frame.origin.y;
-        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10, posy + 5, innerView.frame.size.width/2 - 20, 30)];
+        posx = innerView.frame.origin.x;
+        posy = innerView.frame.origin.y;
+        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10, posy + 5+50, innerView.frame.size.width/2 - 20, 30)];
         label1.text = cityName;
         [label1 setFont:[UIFont systemFontOfSize:25]];
         label1.textColor = [UIColor blackColor];
+        label1.adjustsFontSizeToFitWidth = YES;
         [card addSubview:label1];
         
-        label1 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10 + card.frame.size.width/2, posy+5,innerView.frame.size.width/2 -20 , 30)];
+        label1 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10 + card.frame.size.width/2, posy+5+50,innerView.frame.size.width/2 -20 , 30)];
         label1.text = type;
         [label1 setFont:[UIFont systemFontOfSize:25]];
         label1.textColor = [UIColor blackColor];
@@ -138,6 +253,7 @@
         label2.text = temperature;
         [label2 setFont:[UIFont systemFontOfSize:70]];
         label2.textColor = [UIColor blackColor];
+        label2.adjustsFontSizeToFitWidth = YES;
         [card addSubview:label2];
 
         
@@ -179,6 +295,7 @@
         {
             weatherIcon = [UIImage imageNamed:@"4.png"];
         }
+        else {weatherIcon = [UIImage imageNamed:@"1.png"];}
         imgView.image = weatherIcon;
 
         
@@ -187,6 +304,7 @@
         label.text = lowest;
         label.textColor = [UIColor blackColor];
         [label setFont:[UIFont systemFontOfSize:15]];
+        label.adjustsFontSizeToFitWidth = YES;
         [card addSubview:label];
         
         
@@ -194,6 +312,7 @@
         label.text = highest;
         label.textColor = [UIColor blackColor];
         [label setFont:[UIFont systemFontOfSize:15]];
+        label.adjustsFontSizeToFitWidth = YES;
         [card addSubview:label];
         
 
@@ -203,6 +322,7 @@
         noticeLabel.text = notice;
         [noticeLabel setFont:[UIFont systemFontOfSize:16]];
         noticeLabel.textColor = [UIColor blackColor];
+        label.adjustsFontSizeToFitWidth = YES;
         [card addSubview:noticeLabel];
         
         posy = card.frame.origin.y + card.frame.size.height - 90;
@@ -228,12 +348,22 @@
         label6.textColor = [UIColor blackColor];
         [card addSubview:label6];
 
-        UIButton *deleteCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 25, 25)];
-        
-        
-        [deleteCard setBackgroundImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        UIButton *deleteCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x - 7 , card.frame.origin.y-12, 30, 30)];
+        UIButton *flipCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 27, 30)];
+        [flipCard setImage:[UIImage imageNamed:@"reverse.png"] forState:UIControlStateNormal];
+        [flipCard addTarget:self action:@selector(reverseCard:) forControlEvents:UIControlEventTouchUpInside];
+        flipCard.tag = i;
+        [deleteCard setBackgroundImage:[UIImage imageNamed:@"chahao.png"] forState:UIControlStateNormal];
         deleteCard.showsTouchWhenHighlighted = YES;
         [card addSubview:deleteCard];
+        [card addSubview:flipCard];
+        
+        
+        flipCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 27, 30)];
+        [flipCard setImage:[UIImage imageNamed:@"reverse.png"] forState:UIControlStateNormal];
+        [flipCard addTarget:self action:@selector(reverseCard2:) forControlEvents:UIControlEventTouchUpInside];
+        flipCard.tag = i;
+        [reverseView addSubview:flipCard];
         
         deleteCard.tag = i;
         [deleteCard addTarget:self action:@selector(delCard:) forControlEvents:UIControlEventTouchUpInside];
@@ -242,14 +372,101 @@
     [singleCityForecastView addSubview:self.cityNanageBtn];
     singleCityForecastView.scrollView.contentSize = CGSizeMake(cardSize.width * self.suscriptions.count, cardSize.height);
     
+    
+    }
 }
-
+- (void)reverseCard:(UIButton *)bnt
+{
+    [SingleCityForecastViewController transitformShowView:self.cardViews[bnt.tag] hiddenView:self.reverseCardViews[bnt.tag]];
+    UIView *v1 = self.cardViews[bnt.tag];
+    v1.hidden = YES;
+    UIView *v2 = self.reverseCardViews[bnt.tag];
+    v2.hidden = NO;
+}
+- (void)reverseCard2:(UIButton *)bnt
+{
+    [SingleCityForecastViewController transitformShowView:self.reverseCardViews[bnt.tag] hiddenView:self.cardViews[bnt.tag]];
+    UIView *v1 = self.cardViews[bnt.tag];
+       v1.hidden = NO;
+       UIView *v2 = self.reverseCardViews[bnt.tag];
+       v2.hidden = YES;
+}
 -(void)delCard:(UIButton*)bnt
 {
+    if(bnt.tag == self.suscriptions.count-1)
+    {
+        NSLog(@"inIN");
+         [self.suscriptions removeObjectAtIndex:bnt.tag];
+          [self.cardColor removeObjectAtIndex:bnt.tag];
+          __block int width = 0;
+          __block UIView *card = self.cardViews[bnt.tag];
+          int posx = self.scrollView.scrollView.contentOffset.x;
+          int posy = self.scrollView.scrollView.contentOffset.y;
+          [UIView animateWithDuration:0.3 animations:^{
+              card.alpha = 0.1;
+              width = card.frame.size.width;
+              for(int i=0;i<bnt.tag;i++)
+              {
+                  UIView *nxtCards = _cardViews[i];
+                  nxtCards.frame = CGRectMake(nxtCards.frame.origin.x + 270, nxtCards.frame.origin.y, nxtCards.frame.size.width, nxtCards.frame.size.height);
+                  
+              }
+         //     [self.view layoutSubviews];
+              
+
+          } completion:^(BOOL finished){
+              self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x , self.scrollView.frame.origin.y, self.scrollView.frame.size.width- 270, self.scrollView.frame.size.height);
+              card.alpha = 0;
+              [card removeFromSuperview];
+              [self viewDidLoad];
+              if(bnt.tag!=self.suscriptions.count)
+                  [self.scrollView.scrollView setContentOffset:CGPointMake(posx, posy)];
+              else {
+                  [self.scrollView.scrollView setContentOffset:CGPointMake(posx-270, posy)];
+              }
+          }];
+        
+        [self.cardViews removeObjectAtIndex:bnt.tag];
+        [self.reverseCardViews removeObjectAtIndex:bnt.tag];
+        return;
+    }
+    
+    
    [self.suscriptions removeObjectAtIndex:bnt.tag];
-    [self viewDidLoad];
+    [self.cardColor removeObjectAtIndex:bnt.tag];
+    __block int width = 0;
+    __block UIView *card = self.cardViews[bnt.tag];
+    int posx = self.scrollView.scrollView.contentOffset.x;
+    int posy = self.scrollView.scrollView.contentOffset.y;
+    [UIView animateWithDuration:0.3 animations:^{
+        card.alpha = 0.1;
+        width = card.frame.size.width;
+        for(int i=bnt.tag+1;i<_cardViews.count;i++)
+        {
+            UIView *nxtCards = _cardViews[i];
+            nxtCards.frame = CGRectMake(nxtCards.frame.origin.x - 270, nxtCards.frame.origin.y, nxtCards.frame.size.width, nxtCards.frame.size.height);
+            
+        }
+        
+
+    } completion:^(BOOL finished){
+        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x , self.scrollView.frame.origin.y, self.scrollView.frame.size.width- 270, self.scrollView.frame.size.height);
+        card.alpha = 0;
+        [card removeFromSuperview];
+        
+        [self viewDidLoad];
+        if(bnt.tag!=self.suscriptions.count)
+            [self.scrollView.scrollView setContentOffset:CGPointMake(posx, posy)];
+        else {
+            [self.scrollView.scrollView setContentOffset:CGPointMake(posx-270, posy)];
+        }
+    }];
+
+    [self.cardViews removeObjectAtIndex:bnt.tag];
+    [self.reverseCardViews removeObjectAtIndex:bnt.tag];
 }
 
+//离开视图前保存订阅的天气数据
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     myApp *app = [myApp getInstance];
@@ -261,11 +478,12 @@
 - (void)goEditSuscription
 {
     myApp *app = [myApp getInstance];
-    
     EditSuscriptionsViewController *editVC = app.editSuscriptionsViewController;
     if(editVC==nil)editVC = [[EditSuscriptionsViewController alloc] init];
-    [self.navigationController pushViewController:editVC animated:YES];
-    
+    //[self.navigationController pushViewController:editVC animated:YES];
+    [self presentViewController:editVC animated:YES completion:^{
+        
+    }];
 }
 
 - (UIColor *)randomColor {
@@ -277,28 +495,12 @@
 
 - (void)refreshAnimation:(UIButton *)btn;
 {
-//    UIImageView *imgView = btn.imageView;
-//    [UIView animateWithDuration:0.5 animations:^{
-//        CGAffineTransform transform = CGAffineTransformMakeRotation(0.5 * 3.141526535f);
-//        btn.transform = transform;
-//    } completion:^(BOOL finished){
-//        [self viewDidLoad];
-//    }];
     NSLog(@"clicked");
     [btn reloadInputViews];
     [UIView animateWithDuration:1 animations:^{
-               btn.transform = CGAffineTransformMakeRotation(M_PI);
-    } completion:^(BOOL finished){}];
+        btn.transform = CGAffineTransformMakeRotation(M_PI);
+    } completion:^(BOOL finished){btn.alpha = 0;}];
 
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E9A7F9D239F4C300009B1A2 /* WeatherStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9A7F9C239F4C300009B1A2 /* WeatherStorage.m */; };
 		2E9CA415239DD6B4005567BA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9CA414239DD6B4005567BA /* AppDelegate.m */; };
 		2E9CA418239DD6B4005567BA /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9CA417239DD6B4005567BA /* SceneDelegate.m */; };
 		2E9CA41B239DD6B4005567BA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9CA41A239DD6B4005567BA /* ViewController.m */; };
@@ -29,8 +28,6 @@
 		2EBC6337239E657700CF13D9 /* MiSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC6336239E657700CF13D9 /* MiSearchBar.m */; };
 		2EBC633A239E704600CF13D9 /* DetailedWeatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC6339239E704600CF13D9 /* DetailedWeatherViewController.m */; };
 		2EBC633D239E745D00CF13D9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC633C239E745D00CF13D9 /* MainViewController.m */; };
-		2ED81E9123A073D4005268CA /* CardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED81E9023A073D4005268CA /* CardView.m */; };
-		2ED81E9B23A0C431005268CA /* Headers.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED81E9A23A0C431005268CA /* Headers.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +48,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2E9A7F9B239F4C300009B1A2 /* WeatherStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherStorage.h; sourceTree = "<group>"; };
-		2E9A7F9C239F4C300009B1A2 /* WeatherStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherStorage.m; sourceTree = "<group>"; };
 		2E9CA410239DD6B4005567BA /* KobeWeatherReport.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KobeWeatherReport.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E9CA413239DD6B4005567BA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E9CA414239DD6B4005567BA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -93,10 +88,6 @@
 		2EBC6339239E704600CF13D9 /* DetailedWeatherViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailedWeatherViewController.m; sourceTree = "<group>"; };
 		2EBC633B239E745D00CF13D9 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		2EBC633C239E745D00CF13D9 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		2ED81E8F23A073D4005268CA /* CardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CardView.h; sourceTree = "<group>"; };
-		2ED81E9023A073D4005268CA /* CardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CardView.m; sourceTree = "<group>"; };
-		2ED81E9923A0C431005268CA /* Headers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Headers.h; sourceTree = "<group>"; };
-		2ED81E9A23A0C431005268CA /* Headers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Headers.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,10 +139,8 @@
 			isa = PBXGroup;
 			children = (
 				2E9CA44E239DD7CB005567BA /* Views */,
-				2E9CA483239E23AD005567BA /* Manager */,
+				2E9CA483239E23AD005567BA /* App */,
 				2E9CA482239E2399005567BA /* Service */,
-				2E9CA480239E236D005567BA /* Logic */,
-				2E9CA464239DED1C005567BA /* GetNetworkData */,
 				2E9CA44F239DD7D6005567BA /* Controller */,
 				2E9CA44D239DD787005567BA /* Model */,
 				2E9CA413239DD6B4005567BA /* AppDelegate.h */,
@@ -205,8 +194,6 @@
 			children = (
 				2EBC6333239E652B00CF13D9 /* SingleCityForecastView */,
 				2EBC6334239E653E00CF13D9 /* EditsuscriptionsView */,
-				2ED81E8F23A073D4005268CA /* CardView.h */,
-				2ED81E9023A073D4005268CA /* CardView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -235,31 +222,21 @@
 			path = GetNetworkData;
 			sourceTree = "<group>";
 		};
-		2E9CA480239E236D005567BA /* Logic */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Logic;
-			sourceTree = "<group>";
-		};
 		2E9CA482239E2399005567BA /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				2E9A7F9B239F4C300009B1A2 /* WeatherStorage.h */,
-				2E9A7F9C239F4C300009B1A2 /* WeatherStorage.m */,
+				2E9CA464239DED1C005567BA /* GetNetworkData */,
 			);
 			path = Service;
 			sourceTree = "<group>";
 		};
-		2E9CA483239E23AD005567BA /* Manager */ = {
+		2E9CA483239E23AD005567BA /* App */ = {
 			isa = PBXGroup;
 			children = (
 				2E9CA484239E2400005567BA /* myApp.h */,
 				2E9CA485239E2400005567BA /* myApp.m */,
-				2ED81E9923A0C431005268CA /* Headers.h */,
-				2ED81E9A23A0C431005268CA /* Headers.m */,
 			);
-			path = Manager;
+			path = App;
 			sourceTree = "<group>";
 		};
 		2EBC6333239E652B00CF13D9 /* SingleCityForecastView */ = {
@@ -412,9 +389,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E9A7F9D239F4C300009B1A2 /* WeatherStorage.m in Sources */,
 				2E9CA41B239DD6B4005567BA /* ViewController.m in Sources */,
-				2ED81E9B23A0C431005268CA /* Headers.m in Sources */,
 				2EBC633A239E704600CF13D9 /* DetailedWeatherViewController.m in Sources */,
 				2E9CA45D239DD957005567BA /* WeatherInfo.m in Sources */,
 				2E9CA47B239DF933005567BA /* EditSuscriptionsViewController.m in Sources */,
@@ -427,7 +402,6 @@
 				2E9CA486239E2400005567BA /* myApp.m in Sources */,
 				2E9CA478239DF916005567BA /* SingleCityForecastViewController.m in Sources */,
 				2EBC633D239E745D00CF13D9 /* MainViewController.m in Sources */,
-				2ED81E9123A073D4005268CA /* CardView.m in Sources */,
 				2E9CA418239DD6B4005567BA /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
