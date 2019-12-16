@@ -20,7 +20,6 @@
 {
     self = [super init];
    // if(self)
-    [self viewDidLoad];
     return self;
 }
 - (NSString*)pinyin:(NSString *)ss
@@ -88,10 +87,6 @@
 }
 - (void)domakeArr{
         NSLog(@"kobedsjafasfdsdf");
-    if(!self.haveInitArr==nil||self.haveInitArr == NO)
-    {
-        
-        NSLog(@"kobedsjafasfdsdf");
     NSDictionary *mySuscriptionsDictionary = [[NSUserDefaults standardUserDefaults] objectForKey:@"CityCodeMap"];
     
     self.arr = [[NSMutableArray alloc] init];
@@ -132,9 +127,6 @@
 
     [_arr removeAllObjects];
     _arr = newArray;
-    self.haveInitArr = YES;
-        
-    }
 }
 
 - (void)viewDidLoad {

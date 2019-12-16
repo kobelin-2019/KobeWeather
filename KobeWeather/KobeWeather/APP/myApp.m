@@ -23,6 +23,7 @@ static myApp *appInstance = nil;
 
 -(id) init
 {
+    
     if(!appInstance)
     {
         self = [super init];

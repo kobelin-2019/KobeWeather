@@ -43,43 +43,36 @@
 
 - (void)setUpCityCodeMap{
     myApp *app = [myApp getInstance];
-    NSMutableDictionary*muDic=[[NSMutableDictionary alloc]initWithDictionary:[[NSUserDefaults standardUserDefaults]objectForKey:@"CodeCityMap"]];
-    app.codeCityMap = muDic;
-    muDic=[[NSMutableDictionary alloc]initWithDictionary:[[NSUserDefaults standardUserDefaults]objectForKey:@"CityCodeMap"]];
-    app.cityCodeMap = muDic;
-    if(!app.codeCityMap||!app.cityCodeMap||app.codeCityMap.count==0||app.cityCodeMap.count==0)
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"CityCode" ofType:@"json"];
+    NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
+    NSError *error;
+    id jsonObj = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+    if (!jsonData || error)
     {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"CityCode" ofType:@"json"];
-        NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
-        NSError *error;
-        id jsonObj = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-        if (!jsonData || error)
-        {
-            NSLog(@"JSON解码失败");
-        }
-        else
-        {
+        NSLog(@"JSON解码失败");
+    }
+    else
+    {
 
-            NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        NSData * weatherdata = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-        NSError * error = [[NSError alloc] init];
-        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:weatherdata options:0 error:&error];
-            app.codeCityMap = [[NSMutableDictionary alloc] init];
-            app.cityCodeMap = [[NSMutableDictionary alloc] init];
-            app.codeCityMap[@"jidjaf"] = @"sjdifaj";
-            for(id item in dic)
-            {
-                
-                NSDictionary *detail = item;
-                [app.codeCityMap setValue:detail[@"city_name"] forKey:detail[@"city_code"]];
-                [app.cityCodeMap setValue:detail[@"city_code"] forKey:detail[@"city_name"]];
-            }
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSData * weatherdata = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError * error = [[NSError alloc] init];
+    NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:weatherdata options:0 error:&error];
+        app.codeCityMap = [[NSMutableDictionary alloc] init];
+        app.cityCodeMap = [[NSMutableDictionary alloc] init];
+        app.codeCityMap[@"jidjaf"] = @"sjdifaj";
+        for(id item in dic)
+        {
             
-            NSUserDefaults *defaut = [NSUserDefaults standardUserDefaults];
-            [defaut setObject:app.codeCityMap forKey:@"CodeCityMap"];
-            [defaut setObject:app.cityCodeMap forKey:@"CityCodeMap"];
-            
+            NSDictionary *detail = item;
+            [app.codeCityMap setValue:detail[@"city_name"] forKey:detail[@"city_code"]];
+            [app.cityCodeMap setValue:detail[@"city_code"] forKey:detail[@"city_name"]];
         }
+        
+        NSUserDefaults *defaut = [NSUserDefaults standardUserDefaults];
+        [defaut setObject:app.codeCityMap forKey:@"CodeCityMap"];
+        [defaut setObject:app.cityCodeMap forKey:@"CityCodeMap"];
+        
     }
 
 }
@@ -91,6 +84,7 @@
     WeatherMainPageViewController *mainvc = [[WeatherMainPageViewController alloc] init];
     self.window.rootViewController = mainvc;
     app.weatherMainPageViewController = mainvc;
+    [self setUpCityCodeMap];
 }
 
 
