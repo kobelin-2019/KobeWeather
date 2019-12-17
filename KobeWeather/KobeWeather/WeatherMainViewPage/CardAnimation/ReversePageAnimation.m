@@ -10,16 +10,11 @@
 #import <UIKit/UIKit.h>
 @implementation ReversePageAnimation
 
+//提供天气卡片的翻转动画
 + (void)transitformShowView:(UIView *)view hiddenView:(UIView *)toView
 {
-    NSInteger indexView = [view.superview.subviews indexOfObject:view];
-    NSInteger indexToView = [toView.superview.subviews indexOfObject:toView];
-    [UIView beginAnimations:@"tranTwoViewAnimation" context:nil];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:view.superview cache:YES];
-    [view.superview exchangeSubviewAtIndex:indexView withSubviewAtIndex:indexToView];
-    [UIView commitAnimations];
+    [UIView transitionFromView:view toView:toView duration:0.4 options:UIViewAnimationOptionTransitionFlipFromLeft completion:nil];
 }
+
 
 @end

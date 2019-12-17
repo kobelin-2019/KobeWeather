@@ -1,15 +1,15 @@
 //
-//  SingleCityForecast.m
+//  CityForecastScrollView.m
 //  KobeWeatherReport
 //
 //  Created by kobelin on 2019/12/9.
 //  Copyright © 2019 kobelin. All rights reserved.
 //
 
-#import "SingleCityForecastView.h"
-
+#import "CityForecastScrollView.h"
 
 @implementation ReachableScrollView
+
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
     return YES;
@@ -17,11 +17,14 @@
 
 @end
 
-@interface SingleCityForecastView ()
+
+
+@interface CityForecastScrollView()
 
 @end
 
-@implementation SingleCityForecastView
+@implementation CityForecastScrollView
+
 
 - (ReachableScrollView *)scrollView
 {
@@ -34,6 +37,7 @@
     return _scrollView;
 }
 
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -44,10 +48,12 @@
     return self;
 }
 
+
 - (void)setupView
 {
     [self addSubview:self.scrollView];
 }
+
 
 - (void)setActualWidth:(CGFloat)actualWidth
 {
@@ -61,6 +67,7 @@
     self.scrollView.center = self.center;
 }
 
+
 - (void)setActualHeight:(CGFloat)actualHeight
 {
     if (actualHeight == 0)
@@ -73,8 +80,11 @@
     self.scrollView.center = self.center;
 }
 
+
 - (void)setContentSize:(CGSize)contentSize
 {
     self.scrollView.contentSize = contentSize;
 }
+
+
 @end

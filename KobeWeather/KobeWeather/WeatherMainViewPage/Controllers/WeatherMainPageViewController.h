@@ -1,5 +1,5 @@
 //
-//  CitySelectorViewcontroller.h
+//  WeatherMainPageViewController.h
 //  KobeWeatherReport
 //
 //  Created by kobelin on 2019/12/9.
@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MiSearchBar.h"
+#import "CitySelectorViewController.h"
+#import "CityForecastScrollView.h"
+#import "WeatherInfoModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CitySelectorViewcontroller : UIViewController
+@interface WeatherMainPageViewController : UIViewController
 
 @end
 

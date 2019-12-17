@@ -8,34 +8,34 @@
 
 #import "JsonDecoder.h"
 #import "WeatherInfoModel.h"
-#import "WeatherInfoGetter.h"
-#import "myApp.h"
+#import "MyApp.h"
 @implementation JsonDecoder
 
-- (WeatherInfoModel *)decodeJson: (NSString *)cityName
+//将请求到的天气Json数据解析成WeatherInfoModel
++ (WeatherInfoModel *)decodeJson: (NSString *)cityName
 {
-    myApp *app = [myApp getInstance];
-    WeatherInfoGetter *weatherInfoGetter = [[WeatherInfoGetter alloc]init];
-    NSString *jsonString = [weatherInfoGetter getWeatherInfo:cityName];
-    NSLog(@"IIIIIIIIIIIIII%@",jsonString);
-    NSData * wdata = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-      NSError * error = [[NSError alloc] init];
-      NSDictionary * res = [NSJSONSerialization JSONObjectWithData:wdata options:0 error:&error];
+    MyApp *app = [MyApp sharedInstance];
+    WeatherInfoModel *returnModel = [[WeatherInfoModel alloc] init];
     
+    //建立请求url
+    NSMutableString *Url = [[NSMutableString alloc]  initWithString:@"http://t.weather.sojson.com/api/weather/city/"];
+    [Url appendString:app.cityToCodeMap[cityName]];
+    NSURL *NsUrl = [NSURL URLWithString:Url];
+    
+    //一些中间处理过程
+    NSData *data = [NSData dataWithContentsOfURL:NsUrl];
+    NSString *info = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    NSString *jsonString = info;
+    NSData * wdata = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError * error = [[NSError alloc] init];
+    NSDictionary * res = [NSJSONSerialization JSONObjectWithData:wdata options:0 error:&error];
     NSMutableDictionary *weatherInfoDictionary = [[NSMutableDictionary alloc] initWithDictionary:res];
     
-    NSLog(@"*************%@",res);
-
-    WeatherInfoModel *returnModel = [[WeatherInfoModel alloc] init];
-    //NSLog(@"23333%@",weatherInfoDictionary);
+    //解析过程
     NSDictionary *cityinfo = weatherInfoDictionary[@"cityInfo"];
     NSDictionary *weatherdata = weatherInfoDictionary[@"data"];
-    
-    NSArray *forecast = weatherdata[@"forecast"];
-    
+    NSMutableArray *forecast = weatherdata[@"forecast"];
     NSDictionary *forecastToday = forecast[0];
-    NSLog(@"ffffffffff%@",forecastToday);
-    //NSLog(@"forestcastTaday:%@",forecastToday);
     NSString *date = weatherInfoDictionary[@"date"];
     NSString *thecityName = cityinfo[@"city"];
     NSString *updateTime = cityinfo[@"updateTime"];
@@ -45,7 +45,6 @@
     NSString *lowest = forecastToday[@"low"];
     NSString *type = forecastToday[@"type"];
     NSString *notice = forecastToday[@"notice"];
-    NSLog(@"%@",notice);
     
     //将获取到的数据转化为WeatherInfoModel返回
     returnModel.forecast = forecast;

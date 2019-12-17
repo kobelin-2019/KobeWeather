@@ -10,6 +10,7 @@
 
 @implementation WeatherInfoModel
 
+
 - (id)init
 {
     self = [super init];
@@ -18,7 +19,7 @@
         _cityinfo = [[NSDictionary alloc] init];
         _cityName = [[NSString alloc] init];
         _date = [[NSString alloc]init];
-        _forecast = [[NSDictionary alloc] init];
+        _forecast = [[NSMutableArray alloc] init];
         _forecastToday = [[NSDictionary alloc]init];
         _highest = [[NSString alloc]init];
         _lowest = [[NSString alloc]init];
@@ -32,5 +33,6 @@
     }
     return self;
 }
+
 
 @end

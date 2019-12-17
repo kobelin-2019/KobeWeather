@@ -9,7 +9,7 @@
 
 
 #import "SceneDelegate.h"
-#import "myApp.h"
+#import "MyApp.h"
 #import "WeatherMainPageViewController.h"
 #import "CitySelectorViewController.h"
 #import "UserDefaultStorageService.h"
@@ -18,73 +18,39 @@
 @end
 
 @implementation SceneDelegate
+
+//程序启动后则执行此方法设置必要的数据
 - (void)setUpAppSettings
 {
-    myApp *app = [myApp getInstance];
+    MyApp *app = [MyApp sharedInstance];
     UserDefaultStorageService *dataStorage = [[UserDefaultStorageService alloc] init];
     [dataStorage readUserDefaultConfig];
     
     //如果本地没有数据缓存,则重新设置数据
     if(!app.mySuscriptions||!app.citySelectorViewController)
     {
-        [self setUpCityCodeMap];
-        [self setUpDefauftSuscriptions];//默认订阅北京,上海天气
+        [self setUpDefauftSuscriptions];
         app.citySelectorViewController = [[CitySelectorViewcontroller alloc] init];
     }
     
 }
 
+//默认订阅北京,上海天气
 - (void)setUpDefauftSuscriptions {
-    myApp *app = [myApp getInstance];
+    MyApp *app = [MyApp sharedInstance];
     app.mySuscriptions = [[NSMutableArray alloc] init];
     [app.mySuscriptions addObject:@"101010100"];
     [app.mySuscriptions addObject:@"101020100"];
 }
 
-- (void)setUpCityCodeMap{
-    myApp *app = [myApp getInstance];
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"CityCode" ofType:@"json"];
-    NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
-    NSError *error;
-    id jsonObj = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-    if (!jsonData || error)
-    {
-        NSLog(@"JSON解码失败");
-    }
-    else
-    {
-
-        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSData * weatherdata = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    NSError * error = [[NSError alloc] init];
-    NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:weatherdata options:0 error:&error];
-        app.codeCityMap = [[NSMutableDictionary alloc] init];
-        app.cityCodeMap = [[NSMutableDictionary alloc] init];
-        app.codeCityMap[@"jidjaf"] = @"sjdifaj";
-        for(id item in dic)
-        {
-            
-            NSDictionary *detail = item;
-            [app.codeCityMap setValue:detail[@"city_name"] forKey:detail[@"city_code"]];
-            [app.cityCodeMap setValue:detail[@"city_code"] forKey:detail[@"city_name"]];
-        }
-        
-        NSUserDefaults *defaut = [NSUserDefaults standardUserDefaults];
-        [defaut setObject:app.codeCityMap forKey:@"CodeCityMap"];
-        [defaut setObject:app.cityCodeMap forKey:@"CityCodeMap"];
-        
-    }
-
-}
-
+//主scene入口，建立入口视图控制器
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-    
     [self setUpAppSettings];
-    myApp *app = [myApp getInstance];
+    MyApp *app = [MyApp sharedInstance];
+    app.citySelectorViewController = [[CitySelectorViewcontroller alloc] init];
     WeatherMainPageViewController *mainvc = [[WeatherMainPageViewController alloc] init];
     self.window.rootViewController = mainvc;
     app.weatherMainPageViewController = mainvc;
-    [self setUpCityCodeMap];
 }
 
 

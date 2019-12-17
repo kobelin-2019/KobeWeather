@@ -1,5 +1,5 @@
 //
-//  SingleCityForecast.h
+//  CityForecastScrollView.h
 //  KobeWeatherReport
 //
 //  Created by kobelin on 2019/12/9.
@@ -13,12 +13,10 @@
 @end
 
 
-@interface SingleCityForecastView : UIView
+@interface CityForecastScrollView : UIView
 
 @property (nonatomic, assign) CGFloat actualWidth;
-
 @property (nonatomic, assign) CGFloat actualHeight;
-
 @property (nonatomic, strong) ReachableScrollView *scrollView;
 
 @end

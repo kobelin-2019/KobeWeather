@@ -8,14 +8,16 @@
 
 //将获取到的天气数据转化为WeahterMainPage使用的数据模型
 #import <Foundation/Foundation.h>
-#import "WeatherInfoGetter.h"
 #import "WeatherInfoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
+/*
+ Json解析类
+ */
 @interface JsonDecoder : NSObject
 
-- (WeatherInfoModel *)decodeJson: (NSString *)cityName;
+//将请求到的天气Json数据解析成WeatherInfoModel
++ (WeatherInfoModel *)decodeJson: (NSString *)cityName;
 
 @end
 

@@ -11,8 +11,9 @@
 		2E06AFFB23A72167000F7C19 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E06AFFA23A72167000F7C19 /* Default-568h@2x.png */; };
 		2E06AFFD23A72258000F7C19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E06AFFC23A72258000F7C19 /* Assets.xcassets */; };
 		2E06AFFF23A7281F000F7C19 /* CityCode.json in Resources */ = {isa = PBXBuildFile; fileRef = 2E06AFFE23A7281E000F7C19 /* CityCode.json */; };
+		2E06B01223A8830A000F7C19 /* RandomColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E06B01123A8830A000F7C19 /* RandomColor.m */; };
 		2E1BD0E023A3C82F00285AED /* MiSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1BD0DF23A3C82F00285AED /* MiSearchBar.m */; };
-		2E1BD0E623A3CB9000285AED /* SingleCityForecastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1BD0E523A3CB9000285AED /* SingleCityForecastView.m */; };
+		2E1BD0E623A3CB9000285AED /* CityForecastScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1BD0E523A3CB9000285AED /* CityForecastScrollView.m */; };
 		2E86E24923A3AD020067872F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E24823A3AD020067872F /* AppDelegate.m */; };
 		2E86E24C23A3AD020067872F /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E24B23A3AD020067872F /* SceneDelegate.m */; };
 		2E86E24F23A3AD020067872F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E24E23A3AD020067872F /* ViewController.m */; };
@@ -21,9 +22,8 @@
 		2E86E25A23A3AD040067872F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E25923A3AD040067872F /* main.m */; };
 		2E86E26423A3AD040067872F /* KobeWeatherTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E26323A3AD040067872F /* KobeWeatherTests.m */; };
 		2E86E26F23A3AD040067872F /* KobeWeatherUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E26E23A3AD040067872F /* KobeWeatherUITests.m */; };
-		2E86E28423A3AE3F0067872F /* myApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E28323A3AE3F0067872F /* myApp.m */; };
+		2E86E28423A3AE3F0067872F /* MyApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E28323A3AE3F0067872F /* MyApp.m */; };
 		2E86E28723A3AE6A0067872F /* JsonDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E28623A3AE6A0067872F /* JsonDecoder.m */; };
-		2E86E28A23A3AE7E0067872F /* WeatherInfoGetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E28923A3AE7E0067872F /* WeatherInfoGetter.m */; };
 		2E86E28D23A3AF420067872F /* WeatherMainPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E28C23A3AF420067872F /* WeatherMainPageViewController.m */; };
 		2E86E29723A3AFD90067872F /* WeatherInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E29623A3AFD90067872F /* WeatherInfoModel.m */; };
 		2E86E29B23A3B05C0067872F /* CitySelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E29A23A3B05C0067872F /* CitySelectorViewController.m */; };
@@ -53,10 +53,12 @@
 		2E06AFFA23A72167000F7C19 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2E06AFFC23A72258000F7C19 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E06AFFE23A7281E000F7C19 /* CityCode.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CityCode.json; sourceTree = "<group>"; };
+		2E06B01023A8830A000F7C19 /* RandomColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RandomColor.h; sourceTree = "<group>"; };
+		2E06B01123A8830A000F7C19 /* RandomColor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RandomColor.m; sourceTree = "<group>"; };
 		2E1BD0DE23A3C82F00285AED /* MiSearchBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MiSearchBar.h; sourceTree = "<group>"; };
 		2E1BD0DF23A3C82F00285AED /* MiSearchBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MiSearchBar.m; sourceTree = "<group>"; };
-		2E1BD0E423A3CB9000285AED /* SingleCityForecastView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleCityForecastView.h; sourceTree = "<group>"; };
-		2E1BD0E523A3CB9000285AED /* SingleCityForecastView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SingleCityForecastView.m; sourceTree = "<group>"; };
+		2E1BD0E423A3CB9000285AED /* CityForecastScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CityForecastScrollView.h; sourceTree = "<group>"; };
+		2E1BD0E523A3CB9000285AED /* CityForecastScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CityForecastScrollView.m; sourceTree = "<group>"; };
 		2E86E24423A3AD020067872F /* KobeWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KobeWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E86E24723A3AD020067872F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E86E24823A3AD020067872F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -74,12 +76,10 @@
 		2E86E26A23A3AD040067872F /* KobeWeatherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KobeWeatherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E86E26E23A3AD040067872F /* KobeWeatherUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KobeWeatherUITests.m; sourceTree = "<group>"; };
 		2E86E27023A3AD040067872F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E86E28223A3AE3F0067872F /* myApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = myApp.h; sourceTree = "<group>"; };
-		2E86E28323A3AE3F0067872F /* myApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = myApp.m; sourceTree = "<group>"; };
+		2E86E28223A3AE3F0067872F /* MyApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyApp.h; sourceTree = "<group>"; };
+		2E86E28323A3AE3F0067872F /* MyApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyApp.m; sourceTree = "<group>"; };
 		2E86E28523A3AE6A0067872F /* JsonDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JsonDecoder.h; sourceTree = "<group>"; };
 		2E86E28623A3AE6A0067872F /* JsonDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JsonDecoder.m; sourceTree = "<group>"; };
-		2E86E28823A3AE7E0067872F /* WeatherInfoGetter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherInfoGetter.h; sourceTree = "<group>"; };
-		2E86E28923A3AE7E0067872F /* WeatherInfoGetter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherInfoGetter.m; sourceTree = "<group>"; };
 		2E86E28B23A3AF420067872F /* WeatherMainPageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherMainPageViewController.h; sourceTree = "<group>"; };
 		2E86E28C23A3AF420067872F /* WeatherMainPageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherMainPageViewController.m; sourceTree = "<group>"; };
 		2E86E29523A3AFD90067872F /* WeatherInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherInfoModel.h; sourceTree = "<group>"; };
@@ -115,6 +115,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E06B00C23A878CA000F7C19 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2E86E28C23A3AF420067872F /* WeatherMainPageViewController.m */,
+				2E86E28B23A3AF420067872F /* WeatherMainPageViewController.h */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		2E1BD0E123A3CB3C00285AED /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,8 +136,8 @@
 		2E1BD0E223A3CB4700285AED /* View */ = {
 			isa = PBXGroup;
 			children = (
-				2E1BD0E423A3CB9000285AED /* SingleCityForecastView.h */,
-				2E1BD0E523A3CB9000285AED /* SingleCityForecastView.m */,
+				2E1BD0E423A3CB9000285AED /* CityForecastScrollView.h */,
+				2E1BD0E523A3CB9000285AED /* CityForecastScrollView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -199,8 +208,8 @@
 		2E86E27C23A3AD340067872F /* APP */ = {
 			isa = PBXGroup;
 			children = (
-				2E86E28223A3AE3F0067872F /* myApp.h */,
-				2E86E28323A3AE3F0067872F /* myApp.m */,
+				2E86E28223A3AE3F0067872F /* MyApp.h */,
+				2E86E28323A3AE3F0067872F /* MyApp.m */,
 			);
 			path = APP;
 			sourceTree = "<group>";
@@ -210,8 +219,8 @@
 			children = (
 				2E86E28523A3AE6A0067872F /* JsonDecoder.h */,
 				2E86E28623A3AE6A0067872F /* JsonDecoder.m */,
-				2E86E28823A3AE7E0067872F /* WeatherInfoGetter.h */,
-				2E86E28923A3AE7E0067872F /* WeatherInfoGetter.m */,
+				2E06B01023A8830A000F7C19 /* RandomColor.h */,
+				2E06B01123A8830A000F7C19 /* RandomColor.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -219,8 +228,7 @@
 		2E86E27E23A3AD510067872F /* WeatherMainViewPage */ = {
 			isa = PBXGroup;
 			children = (
-				2E86E28C23A3AF420067872F /* WeatherMainPageViewController.m */,
-				2E86E28B23A3AF420067872F /* WeatherMainPageViewController.h */,
+				2E06B00C23A878CA000F7C19 /* Controllers */,
 				2E1BD0E223A3CB4700285AED /* View */,
 				2E1BD0E123A3CB3C00285AED /* Model */,
 				2E86E29823A3AFFD0067872F /* CardAnimation */,
@@ -394,13 +402,13 @@
 				2E06AFF623A71756000F7C19 /* ReversePageAnimation.m in Sources */,
 				2E1BD0E023A3C82F00285AED /* MiSearchBar.m in Sources */,
 				2E86E24923A3AD020067872F /* AppDelegate.m in Sources */,
-				2E1BD0E623A3CB9000285AED /* SingleCityForecastView.m in Sources */,
+				2E1BD0E623A3CB9000285AED /* CityForecastScrollView.m in Sources */,
 				2E86E28723A3AE6A0067872F /* JsonDecoder.m in Sources */,
 				2E86E28D23A3AF420067872F /* WeatherMainPageViewController.m in Sources */,
-				2E86E28A23A3AE7E0067872F /* WeatherInfoGetter.m in Sources */,
+				2E06B01223A8830A000F7C19 /* RandomColor.m in Sources */,
 				2E86E29723A3AFD90067872F /* WeatherInfoModel.m in Sources */,
 				2E86E29E23A3B0940067872F /* UserDefaultStorageService.m in Sources */,
-				2E86E28423A3AE3F0067872F /* myApp.m in Sources */,
+				2E86E28423A3AE3F0067872F /* MyApp.m in Sources */,
 				2E86E25A23A3AD040067872F /* main.m in Sources */,
 				2E86E24C23A3AD020067872F /* SceneDelegate.m in Sources */,
 			);
@@ -582,6 +590,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kobelin.NEWKobeWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}";
 			};
 			name = Debug;
 		};
@@ -600,6 +609,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kobelin.NEWKobeWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}";
 			};
 			name = Release;
 		};
