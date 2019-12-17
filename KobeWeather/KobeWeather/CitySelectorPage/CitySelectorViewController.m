@@ -23,7 +23,7 @@
 
 @implementation CitySelectorViewcontroller
 
-#pragma - 一些初始化工作
+#pragma mark - 一些初始化工作
 
 - (id)init
 {
@@ -116,7 +116,7 @@
     _arr = newArray;
 }
 
-#pragma - 城市名拼音转化,方便排序
+#pragma mark - 城市名拼音转化,方便排序
 
 - (NSString*)pinyin:(NSString *)string
 {
@@ -153,7 +153,7 @@
     [super viewDidLoad];
 }
 
-#pragma - UITableViewDelegate,UITableViewDataSource
+#pragma mark - UITableViewDelegate,UITableViewDataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -213,7 +213,7 @@
     }];
 }
 
-#pragma - UISearchBarDelegate
+#pragma mark - UISearchBarDelegate
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
@@ -251,7 +251,7 @@
     self.isSearch = NO;
 }
 
-#pragma - UITextFieldDelegate
+#pragma mark - UITextFieldDelegate
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {

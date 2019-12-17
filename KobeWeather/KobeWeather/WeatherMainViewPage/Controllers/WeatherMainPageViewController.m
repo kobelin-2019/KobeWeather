@@ -16,7 +16,6 @@
 #import "UserDefaultStorageService.h"
 #import "RandomColor.h"
 
-
 /*
 天气主页面：以卡片形式展示订阅的天气数据
  */
