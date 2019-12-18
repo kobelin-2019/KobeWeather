@@ -74,8 +74,6 @@
     [super didReceiveMemoryWarning];
 }
 
-
-
 //加载天气数据，绘制卡片
 - (void)loadWeatherCardViews
 {
@@ -121,7 +119,6 @@
             UIView *reverseView = [[UIView alloc] initWithFrame:card.frame];
             reverseView.backgroundColor = card.backgroundColor;
 
-            
             [self.cardViews addObject:card];
             [self.reverseCardViews addObject:reverseView];
             reverseView.hidden = YES;
@@ -132,54 +129,7 @@
             WeatherInfoModel *weatherInfoModel = [[WeatherInfoModel alloc] init];
             weatherInfoModel = [JsonDecoder decodeJson:app.codeToCityMap[self.suscriptions[i]]];
             
-            int forcastViewHeight = reverseView.frame.size.height - 30;
-            int averageForecastViewHeight = (forcastViewHeight-30)/12.0;
-            
-            int posY = 40;int posX = 0;
-            for(int i=1; i < 13; i++)
-            {
-                NSDictionary *forecast = weatherInfoModel.forecast[i];
-                NSString * date = forecast[@"date"];
-                date = [date stringByAppendingString:@"日"];
-                NSString *highest = forecast[@"high"];
-                NSString *lowest = forecast[@"low"];
-                NSString *type = forecast[@"type"];
-                int ww = reverseView.frame.size.width/5;
-                int posX = 0;
-                UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
-                posX += ww;
-                dateLabel.text = date;
-                dateLabel.adjustsFontSizeToFitWidth = YES;
-                
-                UIImage *weatherIcon = [self getWeatherIconWithType:type];
-                
-                UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
-                posX += ww;
-                UIImage *img = weatherIcon;
-                imgView.image = img;
-
-                UILabel *highestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
-                posX += ww;
-                highestLabel.text = highest;
-                highestLabel.adjustsFontSizeToFitWidth = YES;
-                
-                UILabel *lowestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
-                posX += ww;
-                lowestLabel.text = lowest;
-                lowestLabel.adjustsFontSizeToFitWidth = YES;
-                
-                UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
-                posX += ww;
-                typeLabel.text = type;
-                typeLabel.adjustsFontSizeToFitWidth = YES;
-              
-                [reverseView addSubview:dateLabel];
-                [reverseView addSubview:highestLabel];
-                [reverseView addSubview:lowestLabel];
-                [reverseView addSubview:typeLabel];
-                [reverseView addSubview:imgView];
-                posY += averageForecastViewHeight;
-            }
+            [self setUpReverseForecastView:reverseView WeatherInfo:weatherInfoModel];
             
             NSString *date = weatherInfoModel.date ? weatherInfoModel.date : @"";
             NSString *cityName = weatherInfoModel.cityName ? weatherInfoModel.cityName : @"";
@@ -192,8 +142,8 @@
             
             UILabel *innerView = [[UILabel alloc] initWithFrame:CGRectInset(card.bounds ,20, 20)];
             
-            posX = innerView.frame.origin.x;
-            posY = innerView.frame.origin.y;
+            int posX = innerView.frame.origin.x;
+            int posY = innerView.frame.origin.y;
             UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5+50, innerView.frame.size.width/2 - 20, 30)];
             label1.text = cityName;
             [label1 setFont:[UIFont systemFontOfSize:25]];
@@ -301,6 +251,58 @@
     [cityForecastScrollView addSubview:self.cityNanageBtn];
     cityForecastScrollView.scrollView.contentSize = CGSizeMake(cardSize.width * self.suscriptions.count, cardSize.height);
     
+}
+
+//根据天气数据绘制卡片反面的视图
+- (void)setUpReverseForecastView:(UIView *)reverseView WeatherInfo:(WeatherInfoModel *)weatherInfoModel
+{
+    int forcastViewHeight = reverseView.frame.size.height - 30;
+    int averageForecastViewHeight = (forcastViewHeight-30)/12.0;
+    int posY = 40;
+    for(int i=1; i < 13; i++)
+    {
+        NSDictionary *forecast = weatherInfoModel.forecast[i];
+        NSString * date = forecast[@"date"];
+        date = [date stringByAppendingString:@"日"];
+        NSString *highest = forecast[@"high"];
+        NSString *lowest = forecast[@"low"];
+        NSString *type = forecast[@"type"];
+        int ww = reverseView.frame.size.width/5;
+        int posX = 0;
+        UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+        posX += ww;
+        dateLabel.text = date;
+        dateLabel.adjustsFontSizeToFitWidth = YES;
+        
+        UIImage *weatherIcon = [self getWeatherIconWithType:type];
+        
+        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+        posX += ww;
+        UIImage *img = weatherIcon;
+        imgView.image = img;
+
+        UILabel *highestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+        posX += ww;
+        highestLabel.text = highest;
+        highestLabel.adjustsFontSizeToFitWidth = YES;
+        
+        UILabel *lowestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+        posX += ww;
+        lowestLabel.text = lowest;
+        lowestLabel.adjustsFontSizeToFitWidth = YES;
+        
+        UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+        posX += ww;
+        typeLabel.text = type;
+        typeLabel.adjustsFontSizeToFitWidth = YES;
+      
+        [reverseView addSubview:dateLabel];
+        [reverseView addSubview:highestLabel];
+        [reverseView addSubview:lowestLabel];
+        [reverseView addSubview:typeLabel];
+        [reverseView addSubview:imgView];
+        posY += averageForecastViewHeight;
+    }
 }
 
 //获取天气类型对应的图标
