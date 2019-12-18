@@ -74,6 +74,8 @@
     [super didReceiveMemoryWarning];
 }
 
+
+
 //加载天气数据，绘制卡片
 - (void)loadWeatherCardViews
 {
@@ -132,6 +134,7 @@
             
             int forcastViewHeight = reverseView.frame.size.height - 30;
             int averageForecastViewHeight = (forcastViewHeight-30)/12.0;
+            
             int posY = 40;int posX = 0;
             for(int i=1; i < 13; i++)
             {
@@ -148,30 +151,7 @@
                 dateLabel.text = date;
                 dateLabel.adjustsFontSizeToFitWidth = YES;
                 
-                UIImage *weatherIcon;
-                if([type containsString:@"晴"])
-                {
-                    weatherIcon = [UIImage imageNamed:@"0.png"];
-                }
-                else if([type containsString:@"云"])
-                {
-                    weatherIcon = [UIImage imageNamed:@"1.png"];
-                }
-                else if([type containsString:@"雨"])
-                {
-                    weatherIcon = [UIImage imageNamed:@"2.png"];
-                }
-                else if([type containsString:@"雾"])
-                {
-                    weatherIcon = [UIImage imageNamed:@"3.png"];
-                }
-                else if([type containsString:@"雪"])
-                {
-                    weatherIcon = [UIImage imageNamed:@"4.png"];
-                }
-                else {
-                    weatherIcon = [UIImage imageNamed:@"1.png"];
-                }
+                UIImage *weatherIcon = [self getWeatherIconWithType:type];
                 
                 UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
                 posX += ww;
@@ -193,10 +173,6 @@
                 typeLabel.text = type;
                 typeLabel.adjustsFontSizeToFitWidth = YES;
               
-                dateLabel.textColor = [UIColor blackColor];
-                highestLabel.textColor = [UIColor blackColor];
-                lowestLabel.textColor = [UIColor blackColor];
-                typeLabel.textColor = [UIColor blackColor];
                 [reverseView addSubview:dateLabel];
                 [reverseView addSubview:highestLabel];
                 [reverseView addSubview:lowestLabel];
@@ -254,28 +230,7 @@
             UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX+40, label3.frame.origin.y + label3.frame.size.height , card.frame.size.width - 2*(posX +40) , 120)];
             [card addSubview:imgView];
             UIImage *weatherIcon = nil;
-            
-            if([type containsString:@"晴"])
-            {
-                weatherIcon = [UIImage imageNamed:@"0.png"];
-            }
-            else if([type containsString:@"云"])
-            {
-                weatherIcon = [UIImage imageNamed:@"1.png"];
-            }
-            else if([type containsString:@"雨"])
-            {
-                weatherIcon = [UIImage imageNamed:@"2.png"];
-            }
-            else if([type containsString:@"雾"])
-            {
-                weatherIcon = [UIImage imageNamed:@"3.png"];
-            }
-            else if([type containsString:@"雪"])
-            {
-                weatherIcon = [UIImage imageNamed:@"4.png"];
-            }
-            else {weatherIcon = [UIImage imageNamed:@"1.png"];}
+            weatherIcon = [self getWeatherIconWithType:type];
             imgView.image = weatherIcon;
 
             posY += card.frame.size.height -350 + 150;
@@ -346,6 +301,36 @@
     [cityForecastScrollView addSubview:self.cityNanageBtn];
     cityForecastScrollView.scrollView.contentSize = CGSizeMake(cardSize.width * self.suscriptions.count, cardSize.height);
     
+}
+
+//获取天气类型对应的图标
+- (UIImage *)getWeatherIconWithType:(NSString *)type
+{
+    UIImage *weatherIcon = nil;
+    if([type containsString:@"晴"])
+    {
+        weatherIcon = [UIImage imageNamed:@"0.png"];
+    }
+    else if([type containsString:@"云"])
+    {
+        weatherIcon = [UIImage imageNamed:@"1.png"];
+    }
+    else if([type containsString:@"雨"])
+    {
+        weatherIcon = [UIImage imageNamed:@"2.png"];
+    }
+    else if([type containsString:@"雾"])
+    {
+        weatherIcon = [UIImage imageNamed:@"3.png"];
+    }
+    else if([type containsString:@"雪"])
+    {
+        weatherIcon = [UIImage imageNamed:@"4.png"];
+    }
+    else {
+        weatherIcon = [UIImage imageNamed:@"1.png"];
+    }
+    return weatherIcon;
 }
 
 //从正面翻转天气卡片到反面
