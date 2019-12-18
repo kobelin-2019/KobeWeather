@@ -132,7 +132,7 @@
             
             int forcastViewHeight = reverseView.frame.size.height - 30;
             int averageForecastViewHeight = (forcastViewHeight-30)/12.0;
-            int posy = 40;int posx = 0;
+            int posY = 40;int posX = 0;
             for(int i=1; i < 13; i++)
             {
                 NSDictionary *forecast = weatherInfoModel.forecast[i];
@@ -142,9 +142,9 @@
                 NSString *lowest = forecast[@"low"];
                 NSString *type = forecast[@"type"];
                 int ww = reverseView.frame.size.width/5;
-                int posx = 0;
-                UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
-                posx += ww;
+                int posX = 0;
+                UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+                posX += ww;
                 dateLabel.text = date;
                 dateLabel.adjustsFontSizeToFitWidth = YES;
                 
@@ -173,23 +173,23 @@
                     weatherIcon = [UIImage imageNamed:@"1.png"];
                 }
                 
-                UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
-                posx += ww;
+                UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+                posX += ww;
                 UIImage *img = weatherIcon;
                 imgView.image = img;
 
-                UILabel *highestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
-                posx += ww;
+                UILabel *highestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+                posX += ww;
                 highestLabel.text = highest;
                 highestLabel.adjustsFontSizeToFitWidth = YES;
                 
-                UILabel *lowestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
-                posx += ww;
+                UILabel *lowestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+                posX += ww;
                 lowestLabel.text = lowest;
                 lowestLabel.adjustsFontSizeToFitWidth = YES;
                 
-                UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx, posy, ww, averageForecastViewHeight)];
-                posx += ww;
+                UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX, posY, ww, averageForecastViewHeight)];
+                posX += ww;
                 typeLabel.text = type;
                 typeLabel.adjustsFontSizeToFitWidth = YES;
               
@@ -202,7 +202,7 @@
                 [reverseView addSubview:lowestLabel];
                 [reverseView addSubview:typeLabel];
                 [reverseView addSubview:imgView];
-                posy += averageForecastViewHeight;
+                posY += averageForecastViewHeight;
             }
             
             NSString *date = weatherInfoModel.date ? weatherInfoModel.date : @"";
@@ -216,42 +216,42 @@
             
             UILabel *innerView = [[UILabel alloc] initWithFrame:CGRectInset(card.bounds ,20, 20)];
             
-            posx = innerView.frame.origin.x;
-            posy = innerView.frame.origin.y;
-            UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10, posy + 5+50, innerView.frame.size.width/2 - 20, 30)];
+            posX = innerView.frame.origin.x;
+            posY = innerView.frame.origin.y;
+            UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5+50, innerView.frame.size.width/2 - 20, 30)];
             label1.text = cityName;
             [label1 setFont:[UIFont systemFontOfSize:25]];
             label1.textColor = [UIColor blackColor];
             label1.adjustsFontSizeToFitWidth = YES;
             [card addSubview:label1];
             
-            label1 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10 + card.frame.size.width/2, posy+5+50,innerView.frame.size.width/2 -20 , 30)];
+            label1 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY+5+50,innerView.frame.size.width/2 -20 , 30)];
             label1.text = type;
             [label1 setFont:[UIFont systemFontOfSize:25]];
             label1.textColor = [UIColor blackColor];
             [card addSubview:label1];
             
-            posy += 50;
-            UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10 + 20, posy + 5, innerView.frame.size.width/2 , card.frame.size.height - 350)];
+            posY += 50;
+            UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + 20, posY + 5, innerView.frame.size.width/2 , card.frame.size.height - 350)];
             label2.text = temperature;
             [label2 setFont:[UIFont systemFontOfSize:70]];
             label2.textColor = [UIColor blackColor];
             label2.adjustsFontSizeToFitWidth = YES;
             [card addSubview:label2];
 
-            UILabel *label23 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10 + card.frame.size.width/2 - 15, posy + 5 - 17, innerView.frame.size.width/2 - 20, card.frame.size.height - 400)];
+            UILabel *label23 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2 - 15, posY + 5 - 17, innerView.frame.size.width/2 - 20, card.frame.size.height - 400)];
             label23.text = @"。";
             label23.textColor = [UIColor blackColor];
             [label23 setFont:[UIFont systemFontOfSize:40]];
             [card addSubview:label23];
 
-            UILabel *label3 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10 + card.frame.size.width/2, posy + 5, innerView.frame.size.width/2 - 20, card.frame.size.height - 380)];
+            UILabel *label3 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, innerView.frame.size.width/2 - 20, card.frame.size.height - 380)];
             label3.text = @"C";
             label3.textColor = [UIColor blackColor];
             [label3 setFont:[UIFont systemFontOfSize:40]];
             [card addSubview:label3];
 
-            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posx+40, label3.frame.origin.y + label3.frame.size.height , card.frame.size.width - 2*(posx +40) , 120)];
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX+40, label3.frame.origin.y + label3.frame.size.height , card.frame.size.width - 2*(posX +40) , 120)];
             [card addSubview:imgView];
             UIImage *weatherIcon = nil;
             
@@ -278,46 +278,46 @@
             else {weatherIcon = [UIImage imageNamed:@"1.png"];}
             imgView.image = weatherIcon;
 
-            posy += card.frame.size.height -350 + 150;
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10 , posy + 5, innerView.frame.size.width/2 - 20, 40)];
+            posY += card.frame.size.height -350 + 150;
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 , posY + 5, innerView.frame.size.width/2 - 20, 40)];
             label.text = lowest;
             label.textColor = [UIColor blackColor];
             [label setFont:[UIFont systemFontOfSize:15]];
             label.adjustsFontSizeToFitWidth = YES;
             [card addSubview:label];
             
-            label = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10 + card.frame.size.width/2, posy + 5, innerView.frame.size.width/2 - 20, 40)];
+            label = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, innerView.frame.size.width/2 - 20, 40)];
             label.text = highest;
             label.textColor = [UIColor blackColor];
             [label setFont:[UIFont systemFontOfSize:15]];
             label.adjustsFontSizeToFitWidth = YES;
             [card addSubview:label];
             
-            posy =card.frame.origin.y + card.frame.size.height - 180;
-            UILabel *noticeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10, posy + 5, innerView.frame.size.width - 10, 30)];
+            posY =card.frame.origin.y + card.frame.size.height - 180;
+            UILabel *noticeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width - 10, 30)];
             noticeLabel.text = notice;
             [noticeLabel setFont:[UIFont systemFontOfSize:16]];
             noticeLabel.textColor = [UIColor blackColor];
             label.adjustsFontSizeToFitWidth = YES;
             [card addSubview:noticeLabel];
             
-            posy = card.frame.origin.y + card.frame.size.height - 90;
+            posY = card.frame.origin.y + card.frame.size.height - 90;
 
-            UILabel *label4 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10, posy + 5, innerView.frame.size.width - 20, 30)];
+            UILabel *label4 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width - 20, 30)];
             label4.text = @"数据更新于：";
             [label4 setFont:[UIFont systemFontOfSize:15]];
             label4.textColor = [UIColor blackColor];
             [card addSubview:label4];
 
-            posy += 30;
-            UILabel *label5 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10, posy + 5, innerView.frame.size.width/2 - 20, 30)];
+            posY += 30;
+            UILabel *label5 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width/2 - 20, 30)];
             label5.text = date;
             [label5 setFont:[UIFont systemFontOfSize:15]];
             label5.textColor = [UIColor blackColor];
             [card addSubview:label5];
 
-            posx += card.frame.size.width/2;
-            UILabel *label6 = [[UILabel alloc] initWithFrame:CGRectMake(posx + 10, posy + 5, innerView.frame.size.width/2 - 20, 30)];
+            posX += card.frame.size.width/2;
+            UILabel *label6 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width/2 - 20, 30)];
             label6.text = updateTime;
             [label6 setFont:[UIFont systemFontOfSize:14]];
             label6.textColor = [UIColor blackColor];
@@ -374,8 +374,8 @@
     [self.suscriptions removeObjectAtIndex:button.tag];
     [self.cardColor removeObjectAtIndex:button.tag];
     UIView *card = self.cardViews[button.tag];
-    int posx = self.scrollView.scrollView.contentOffset.x;
-    int posy = self.scrollView.scrollView.contentOffset.y;
+    int posX = self.scrollView.scrollView.contentOffset.x;
+    int posY = self.scrollView.scrollView.contentOffset.y;
     [UIView animateWithDuration:0.3 animations:^{
         int width = 0;
         card.alpha = 0.1;
@@ -404,9 +404,9 @@
         [card removeFromSuperview];
         [self viewDidLoad];
         if(button.tag!=self.suscriptions.count)
-        [self.scrollView.scrollView setContentOffset:CGPointMake(posx, posy)];
+        [self.scrollView.scrollView setContentOffset:CGPointMake(posX, posY)];
         else {
-        [self.scrollView.scrollView setContentOffset:CGPointMake(posx-270, posy)];
+        [self.scrollView.scrollView setContentOffset:CGPointMake(posX-270, posY)];
         }
     }];
 
