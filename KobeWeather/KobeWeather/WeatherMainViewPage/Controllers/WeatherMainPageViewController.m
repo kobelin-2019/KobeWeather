@@ -80,18 +80,11 @@
     MyApp *app = [MyApp sharedInstance];
     self.suscriptions = app.mySuscriptions;
 
-    if(!self.cardColor)self.cardColor = [[NSMutableArray alloc] init];
-    CGSize cardSize = CGSizeMake(270, 360+120+50);
+    [self setUpMainViewComponents];
+    CityForecastScrollView *cityForecastScrollView = self.scrollView;
     NSInteger cardCount = self.suscriptions.count;
-    CityForecastScrollView *cityForecastScrollView = [[CityForecastScrollView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20)];
-        [self.view addSubview:cityForecastScrollView];
-        cityForecastScrollView.actualWidth = cardSize.width;
-        cityForecastScrollView.actualHeight = cardSize.height;
+    CGSize cardSize = CGSizeMake(270, 360+120+50);
     
-    self.scrollView = cityForecastScrollView;
-    self.cardViews = [[NSMutableArray alloc] init];
-    self.reverseCardViews = [[NSMutableArray alloc]init];
-        
     for (int i = 0; i < cardCount; i++)
     {
         @autoreleasepool
@@ -227,30 +220,51 @@
             [label6 setFont:[UIFont systemFontOfSize:14]];
             label6.textColor = [UIColor blackColor];
             [card addSubview:label6];
-
-            UIButton *deleteCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x - 7 , card.frame.origin.y-12, 30, 30)];
-            UIButton *flipCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 26, 26)];
-            [flipCard setImage:[UIImage imageNamed:@"reverseCard.png"] forState:UIControlStateNormal];
-            [flipCard addTarget:self action:@selector(reverseCard:) forControlEvents:UIControlEventTouchUpInside];
-            flipCard.tag = i;
-            [deleteCard setBackgroundImage:[UIImage imageNamed:@"chahao.png"] forState:UIControlStateNormal];
-            deleteCard.showsTouchWhenHighlighted = YES;
-            [card addSubview:deleteCard];
-            [card addSubview:flipCard];
             
-            flipCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 26, 26)];
-            [flipCard setImage:[UIImage imageNamed:@"reverseCard.png"] forState:UIControlStateNormal];
-            [flipCard addTarget:self action:@selector(reverseCard2:) forControlEvents:UIControlEventTouchUpInside];
-            flipCard.tag = i;
-            [reverseView addSubview:flipCard];
-            
-            deleteCard.tag = i;
-            [deleteCard addTarget:self action:@selector(delCard:) forControlEvents:UIControlEventTouchUpInside];
+            [self setUpCardElements:card ReverseView:reverseView CardNumber:i];
         }
     }
     [cityForecastScrollView addSubview:self.cityNanageBtn];
     cityForecastScrollView.scrollView.contentSize = CGSizeMake(cardSize.width * self.suscriptions.count, cardSize.height);
     
+}
+
+//建立视图第一层子视图
+- (void)setUpMainViewComponents
+{
+    if(!self.cardColor)self.cardColor = [[NSMutableArray alloc] init];
+    CGSize cardSize = CGSizeMake(270, 360+120+50);
+    CityForecastScrollView *cityForecastScrollView = [[CityForecastScrollView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20)];
+        [self.view addSubview:cityForecastScrollView];
+        cityForecastScrollView.actualWidth = cardSize.width;
+        cityForecastScrollView.actualHeight = cardSize.height;
+    
+    self.scrollView = cityForecastScrollView;
+    self.cardViews = [[NSMutableArray alloc] init];
+    self.reverseCardViews = [[NSMutableArray alloc]init];
+}
+
+//给卡片正面和反面添加button等组件
+- (void)setUpCardElements:(UIView *)card ReverseView:(UIView *)reverseView CardNumber:(NSInteger)i
+{
+    UIButton *deleteCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x - 7 , card.frame.origin.y-12, 30, 30)];
+    UIButton *flipCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 26, 26)];
+    [flipCard setImage:[UIImage imageNamed:@"reverseCard.png"] forState:UIControlStateNormal];
+    [flipCard addTarget:self action:@selector(reverseCard:) forControlEvents:UIControlEventTouchUpInside];
+    flipCard.tag = i;
+    [deleteCard setBackgroundImage:[UIImage imageNamed:@"chahao.png"] forState:UIControlStateNormal];
+    deleteCard.showsTouchWhenHighlighted = YES;
+    [card addSubview:deleteCard];
+    [card addSubview:flipCard];
+    
+    flipCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 26, 26)];
+    [flipCard setImage:[UIImage imageNamed:@"reverseCard.png"] forState:UIControlStateNormal];
+    [flipCard addTarget:self action:@selector(reverseCard2:) forControlEvents:UIControlEventTouchUpInside];
+    flipCard.tag = i;
+    [reverseView addSubview:flipCard];
+    
+    deleteCard.tag = i;
+    [deleteCard addTarget:self action:@selector(delCard:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 //根据天气数据绘制卡片反面的视图
