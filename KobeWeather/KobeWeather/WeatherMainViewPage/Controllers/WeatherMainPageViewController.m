@@ -74,161 +74,6 @@
     [super didReceiveMemoryWarning];
 }
 
-//加载天气数据，绘制卡片
-- (void)loadWeatherCardViews
-{
-    MyApp *app = [MyApp sharedInstance];
-    self.suscriptions = app.mySuscriptions;
-
-    [self setUpMainViewComponents];
-    CityForecastScrollView *cityForecastScrollView = self.scrollView;
-    NSInteger cardCount = self.suscriptions.count;
-    CGSize cardSize = CGSizeMake(270, 360+120+50);
-    
-    for (int i = 0; i < cardCount; i++)
-    {
-        @autoreleasepool
-        {
-            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(i * cardSize.width, 0, cardSize.width, cardSize.height)];
-            
-            self.refreshBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 10,30+25 , 20, 20)];
-            [self.refreshBtn setImage:[UIImage imageNamed:@"shuaxin.png"] forState:UIControlStateNormal];
-            [self.refreshBtn addTarget:self action:@selector(refreshAnimation:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:self.refreshBtn];
-            
-            UIView *card = [[UIView alloc] initWithFrame:CGRectInset(view.bounds, 10, 10)];
-            card.layer.cornerRadius = self.suscriptions.count;
-            card.layer.masksToBounds = YES;
-            if(i < _cardColor.count)
-            {
-                card.backgroundColor = _cardColor[i];
-            }
-            else
-            {
-                card.backgroundColor = [[RandomColor randomColor]colorWithAlphaComponent:0.4f];
-                [_cardColor addObject:card.backgroundColor];
-            }
-            
-            UIView *reverseView = [[UIView alloc] initWithFrame:card.frame];
-            reverseView.backgroundColor = card.backgroundColor;
-
-            [self.cardViews addObject:card];
-            [self.reverseCardViews addObject:reverseView];
-            reverseView.hidden = YES;
-            [view addSubview:reverseView];
-            [view addSubview:card];
-            [cityForecastScrollView.scrollView addSubview:view];
-           
-            WeatherInfoModel *weatherInfoModel = [[WeatherInfoModel alloc] init];
-            weatherInfoModel = [JsonDecoder decodeJson:app.codeToCityMap[self.suscriptions[i]]];
-            
-            [self setUpReverseForecastView:reverseView WeatherInfo:weatherInfoModel];
-            
-            NSString *date = weatherInfoModel.date ? weatherInfoModel.date : @"";
-            NSString *cityName = weatherInfoModel.cityName ? weatherInfoModel.cityName : @"";
-            NSString *updateTime = weatherInfoModel.updateTime ? weatherInfoModel.updateTime : @"";
-            NSString *temperature = weatherInfoModel.temperature ? weatherInfoModel.temperature : @"";
-            NSString *highest = weatherInfoModel.highest ? weatherInfoModel.highest : @"";
-            NSString *lowest = weatherInfoModel.lowest ? weatherInfoModel.lowest : @"";
-            NSString *type = weatherInfoModel.type ? weatherInfoModel.type : @"";
-            NSString *notice = weatherInfoModel.notice ? weatherInfoModel.notice : @"";
-            
-            UILabel *innerView = [[UILabel alloc] initWithFrame:CGRectInset(card.bounds ,20, 20)];
-            
-            int posX = innerView.frame.origin.x;
-            int posY = innerView.frame.origin.y;
-            UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5+50, innerView.frame.size.width/2 - 20, 30)];
-            label1.text = cityName;
-            [label1 setFont:[UIFont systemFontOfSize:25]];
-            label1.textColor = [UIColor blackColor];
-            label1.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:label1];
-            
-            label1 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY+5+50,innerView.frame.size.width/2 -20 , 30)];
-            label1.text = type;
-            [label1 setFont:[UIFont systemFontOfSize:25]];
-            label1.textColor = [UIColor blackColor];
-            [card addSubview:label1];
-            
-            posY += 50;
-            UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + 20, posY + 5, innerView.frame.size.width/2 , card.frame.size.height - 350)];
-            label2.text = temperature;
-            [label2 setFont:[UIFont systemFontOfSize:70]];
-            label2.textColor = [UIColor blackColor];
-            label2.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:label2];
-
-            UILabel *label23 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2 - 15, posY + 5 - 17, innerView.frame.size.width/2 - 20, card.frame.size.height - 400)];
-            label23.text = @"。";
-            label23.textColor = [UIColor blackColor];
-            [label23 setFont:[UIFont systemFontOfSize:40]];
-            [card addSubview:label23];
-
-            UILabel *label3 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, innerView.frame.size.width/2 - 20, card.frame.size.height - 380)];
-            label3.text = @"C";
-            label3.textColor = [UIColor blackColor];
-            [label3 setFont:[UIFont systemFontOfSize:40]];
-            [card addSubview:label3];
-
-            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX+40, label3.frame.origin.y + label3.frame.size.height , card.frame.size.width - 2*(posX +40) , 120)];
-            [card addSubview:imgView];
-            UIImage *weatherIcon = nil;
-            weatherIcon = [self getWeatherIconWithType:type];
-            imgView.image = weatherIcon;
-
-            posY += card.frame.size.height -350 + 150;
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 , posY + 5, innerView.frame.size.width/2 - 20, 40)];
-            label.text = lowest;
-            label.textColor = [UIColor blackColor];
-            [label setFont:[UIFont systemFontOfSize:15]];
-            label.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:label];
-            
-            label = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, innerView.frame.size.width/2 - 20, 40)];
-            label.text = highest;
-            label.textColor = [UIColor blackColor];
-            [label setFont:[UIFont systemFontOfSize:15]];
-            label.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:label];
-            
-            posY =card.frame.origin.y + card.frame.size.height - 180;
-            UILabel *noticeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width - 10, 30)];
-            noticeLabel.text = notice;
-            [noticeLabel setFont:[UIFont systemFontOfSize:16]];
-            noticeLabel.textColor = [UIColor blackColor];
-            label.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:noticeLabel];
-            
-            posY = card.frame.origin.y + card.frame.size.height - 90;
-
-            UILabel *label4 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width - 20, 30)];
-            label4.text = @"数据更新于：";
-            [label4 setFont:[UIFont systemFontOfSize:15]];
-            label4.textColor = [UIColor blackColor];
-            [card addSubview:label4];
-
-            posY += 30;
-            UILabel *label5 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width/2 - 20, 30)];
-            label5.text = date;
-            [label5 setFont:[UIFont systemFontOfSize:15]];
-            label5.textColor = [UIColor blackColor];
-            [card addSubview:label5];
-
-            posX += card.frame.size.width/2;
-            UILabel *label6 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width/2 - 20, 30)];
-            label6.text = updateTime;
-            [label6 setFont:[UIFont systemFontOfSize:14]];
-            label6.textColor = [UIColor blackColor];
-            [card addSubview:label6];
-            
-            [self setUpCardElements:card ReverseView:reverseView CardNumber:i];
-        }
-    }
-    [cityForecastScrollView addSubview:self.cityNanageBtn];
-    cityForecastScrollView.scrollView.contentSize = CGSizeMake(cardSize.width * self.suscriptions.count, cardSize.height);
-    
-}
-
 //建立视图第一层子视图
 - (void)setUpMainViewComponents
 {
@@ -347,6 +192,151 @@
         weatherIcon = [UIImage imageNamed:@"1.png"];
     }
     return weatherIcon;
+}
+
+
+//加载天气数据，绘制卡片
+- (void)loadWeatherCardViews
+{
+    MyApp *app = [MyApp sharedInstance];
+    self.suscriptions = app.mySuscriptions;
+
+    [self setUpMainViewComponents];
+    CityForecastScrollView *cityForecastScrollView = self.scrollView;
+    NSInteger cardCount = self.suscriptions.count;
+    CGSize cardSize = CGSizeMake(270, 360+120+50);
+    
+    for (int i = 0; i < cardCount; i++)
+    {
+        @autoreleasepool
+        {
+            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(i * cardSize.width, 0, cardSize.width, cardSize.height)];
+            
+            self.refreshBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 10,30+25 , 20, 20)];
+            [self.refreshBtn setImage:[UIImage imageNamed:@"shuaxin.png"] forState:UIControlStateNormal];
+            [self.refreshBtn addTarget:self action:@selector(refreshAnimation:) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:self.refreshBtn];
+            
+            UIView *card = [[UIView alloc] initWithFrame:CGRectInset(view.bounds, 10, 10)];
+            card.layer.cornerRadius = self.suscriptions.count;
+            card.layer.masksToBounds = YES;
+            if(i < _cardColor.count)
+            {
+                card.backgroundColor = _cardColor[i];
+            }
+            else
+            {
+                card.backgroundColor = [[RandomColor randomColor]colorWithAlphaComponent:0.4f];
+                [_cardColor addObject:card.backgroundColor];
+            }
+            
+            UIView *reverseView = [[UIView alloc] initWithFrame:card.frame];
+            reverseView.backgroundColor = card.backgroundColor;
+
+            [self.cardViews addObject:card];
+            [self.reverseCardViews addObject:reverseView];
+            reverseView.hidden = YES;
+            [view addSubview:reverseView];
+            [view addSubview:card];
+            [cityForecastScrollView.scrollView addSubview:view];
+           
+            WeatherInfoModel *weatherInfoModel = [[WeatherInfoModel alloc] init];
+            weatherInfoModel = [JsonDecoder decodeJson:app.codeToCityMap[self.suscriptions[i]]];
+            
+            [self setUpReverseForecastView:reverseView WeatherInfo:weatherInfoModel];
+            
+            NSString *date = weatherInfoModel.date ? weatherInfoModel.date : @"";
+            NSString *cityName = weatherInfoModel.cityName ? weatherInfoModel.cityName : @"";
+            NSString *updateTime = weatherInfoModel.updateTime ? weatherInfoModel.updateTime : @"";
+            NSString *temperature = weatherInfoModel.temperature ? weatherInfoModel.temperature : @"";
+            NSString *highest = weatherInfoModel.highest ? weatherInfoModel.highest : @"";
+            NSString *lowest = weatherInfoModel.lowest ? weatherInfoModel.lowest : @"";
+            NSString *type = weatherInfoModel.type ? weatherInfoModel.type : @"";
+            NSString *notice = weatherInfoModel.notice ? weatherInfoModel.notice : @"";
+            
+            UILabel *innerView = [[UILabel alloc] initWithFrame:CGRectInset(card.bounds ,20, 20)];
+            
+            int posX = innerView.frame.origin.x;
+            int posY = innerView.frame.origin.y;
+            UILabel *labelCityName = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5+50, innerView.frame.size.width/2 - 20, 30)];
+            labelCityName.text = cityName;
+            [labelCityName setFont:[UIFont systemFontOfSize:25]];
+            labelCityName.adjustsFontSizeToFitWidth = YES;
+            [card addSubview:labelCityName];
+            
+            UILabel *labelType = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY+5+50,innerView.frame.size.width/2 -20 , 30)];
+            labelType.text = type;
+            [labelType setFont:[UIFont systemFontOfSize:25]];
+            [card addSubview:labelType];
+            
+            posY += 50;
+            UILabel *labeltemperature = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + 20, posY + 5, innerView.frame.size.width/2 , card.frame.size.height - 350)];
+            labeltemperature.text = temperature;
+            [labeltemperature setFont:[UIFont systemFontOfSize:70]];
+            labeltemperature.adjustsFontSizeToFitWidth = YES;
+            [card addSubview:labeltemperature];
+
+            UILabel *labelCircleIcon = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2 - 15, posY + 5 - 17, innerView.frame.size.width/2 - 20, card.frame.size.height - 400)];
+            labelCircleIcon.text = @"。";
+            [labelCircleIcon setFont:[UIFont systemFontOfSize:40]];
+            [card addSubview:labelCircleIcon];
+
+            UILabel *labelTemperatureSign = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, innerView.frame.size.width/2 - 20, card.frame.size.height - 380)];
+            labelTemperatureSign.text = @"C";
+            [labelTemperatureSign setFont:[UIFont systemFontOfSize:40]];
+            [card addSubview:labelTemperatureSign];
+
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX+40, labelTemperatureSign.frame.origin.y + labelTemperatureSign.frame.size.height , card.frame.size.width - 2*(posX +40) , 120)];
+            [card addSubview:imgView];
+            UIImage *weatherIcon = nil;
+            weatherIcon = [self getWeatherIconWithType:type];
+            imgView.image = weatherIcon;
+
+            posY += card.frame.size.height -350 + 150;
+            UILabel *lowestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 , posY + 5, innerView.frame.size.width/2 - 20, 40)];
+            lowestLabel.text = lowest;
+            [lowestLabel setFont:[UIFont systemFontOfSize:15]];
+            lowestLabel.adjustsFontSizeToFitWidth = YES;
+            [card addSubview:lowestLabel];
+            
+            UILabel *highestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, innerView.frame.size.width/2 - 20, 40)];
+            highestLabel.text = highest;
+            [highestLabel setFont:[UIFont systemFontOfSize:15]];
+            highestLabel.adjustsFontSizeToFitWidth = YES;
+            [card addSubview:highestLabel];
+            
+            posY =card.frame.origin.y + card.frame.size.height - 180;
+            UILabel *noticeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width - 10, 30)];
+            noticeLabel.text = notice;
+            [noticeLabel setFont:[UIFont systemFontOfSize:16]];
+            noticeLabel.adjustsFontSizeToFitWidth = YES;
+            [card addSubview:noticeLabel];
+            
+            posY = card.frame.origin.y + card.frame.size.height - 90;
+
+            UILabel *updateTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width - 20, 30)];
+            updateTimeLabel.text = @"数据更新于：";
+            [updateTimeLabel setFont:[UIFont systemFontOfSize:15]];
+            [card addSubview:updateTimeLabel];
+
+            posY += 30;
+            UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width/2 - 20, 30)];
+            dateLabel.text = date;
+            [dateLabel setFont:[UIFont systemFontOfSize:15]];
+            [card addSubview:dateLabel];
+
+            posX += card.frame.size.width/2;
+            UILabel *label6 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width/2 - 20, 30)];
+            label6.text = updateTime;
+            [label6 setFont:[UIFont systemFontOfSize:14]];
+            [card addSubview:label6];
+            
+            [self setUpCardElements:card ReverseView:reverseView CardNumber:i];
+        }
+    }
+    [cityForecastScrollView addSubview:self.cityNanageBtn];
+    cityForecastScrollView.scrollView.contentSize = CGSizeMake(cardSize.width * self.suscriptions.count, cardSize.height);
+    
 }
 
 //从正面翻转天气卡片到反面
