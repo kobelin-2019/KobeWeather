@@ -26,7 +26,7 @@
 		2E86E28723A3AE6A0067872F /* JsonDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E28623A3AE6A0067872F /* JsonDecoder.m */; };
 		2E86E28D23A3AF420067872F /* WeatherMainPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E28C23A3AF420067872F /* WeatherMainPageViewController.m */; };
 		2E86E29723A3AFD90067872F /* WeatherInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E29623A3AFD90067872F /* WeatherInfoModel.m */; };
-		2E86E29B23A3B05C0067872F /* CitySelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E29A23A3B05C0067872F /* CitySelectorViewController.m */; };
+		2E86E29B23A3B05C0067872F /* CitySelectorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E29A23A3B05C0067872F /* CitySelectorViewController.mm */; };
 		2E86E29E23A3B0940067872F /* UserDefaultStorageService.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E86E29D23A3B0940067872F /* UserDefaultStorageService.m */; };
 /* End PBXBuildFile section */
 
@@ -85,7 +85,7 @@
 		2E86E29523A3AFD90067872F /* WeatherInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherInfoModel.h; sourceTree = "<group>"; };
 		2E86E29623A3AFD90067872F /* WeatherInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherInfoModel.m; sourceTree = "<group>"; };
 		2E86E29923A3B05C0067872F /* CitySelectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CitySelectorViewController.h; sourceTree = "<group>"; };
-		2E86E29A23A3B05C0067872F /* CitySelectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CitySelectorViewController.m; sourceTree = "<group>"; };
+		2E86E29A23A3B05C0067872F /* CitySelectorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CitySelectorViewController.mm; sourceTree = "<group>"; };
 		2E86E29C23A3B0940067872F /* UserDefaultStorageService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserDefaultStorageService.h; sourceTree = "<group>"; };
 		2E86E29D23A3B0940067872F /* UserDefaultStorageService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserDefaultStorageService.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -240,7 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				2E86E29923A3B05C0067872F /* CitySelectorViewController.h */,
-				2E86E29A23A3B05C0067872F /* CitySelectorViewController.m */,
+				2E86E29A23A3B05C0067872F /* CitySelectorViewController.mm */,
 				2E1BD0DE23A3C82F00285AED /* MiSearchBar.h */,
 				2E1BD0DF23A3C82F00285AED /* MiSearchBar.m */,
 			);
@@ -397,7 +397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E86E29B23A3B05C0067872F /* CitySelectorViewController.m in Sources */,
+				2E86E29B23A3B05C0067872F /* CitySelectorViewController.mm in Sources */,
 				2E86E24F23A3AD020067872F /* ViewController.m in Sources */,
 				2E06AFF623A71756000F7C19 /* ReversePageAnimation.m in Sources */,
 				2E1BD0E023A3C82F00285AED /* MiSearchBar.m in Sources */,

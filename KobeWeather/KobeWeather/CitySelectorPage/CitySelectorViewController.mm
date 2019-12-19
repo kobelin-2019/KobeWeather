@@ -12,6 +12,7 @@
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define MAXSizeOfOneSection 10005
+#define CellHeight 44
 #define SearchBarHeight 40
 #define CharacterNumber 26
 
@@ -24,6 +25,7 @@
 @property (nonatomic ,retain) NSMutableArray *arr;
 @property (nonatomic ,retain) NSMutableArray *resultArr;
 @property (nonatomic ,assign) BOOL isSearch;//判断是否在搜索
+@property (nonatomic ,retain) NSMutableArray *tableViewOffSetArray;
 
 @end
 
@@ -37,6 +39,7 @@
     if(self)
     {
         self.view.backgroundColor = [UIColor clearColor];
+        _tableViewOffSetArray = [[NSMutableArray alloc] init];
         [self domakeArr];
     
         _searchBar = [[MiSearchBar alloc] initWithFrame:CGRectMake(0,  0, self.view.bounds.size.width, SearchBarHeight) placeholder:@"搜索"];
@@ -58,9 +61,36 @@
         
         [self.view addSubview:_tableView];
         _resultArr = [[NSMutableArray alloc]init];
+        
+        CGFloat startHeight = ScreenHeight / 7.0;
+        CGFloat endHeight = ScreenHeight - startHeight;
+        CGFloat averageHeight = (endHeight - startHeight)/26.0;
+        CGFloat posX = ScreenWidth - 25;
+        CGFloat posY = startHeight;
+        NSArray *str = @[@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",
+        @"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",
+        @"Y",@"Z"];
+        for (int i = 0; i < 26 ; ++i) {
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(posX, posY, 25, averageHeight)];
+            posY += averageHeight;
+            [btn setTitle:str[i] forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            btn.titleLabel.font = [UIFont systemFontOfSize: 12.0];
+            [self.view addSubview:btn];
+            btn.tag = i;
+            [btn addTarget:self action:@selector(jumpToTableViewOffSet:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
          
     }
     return self;
+}
+
+- (void)jumpToTableViewOffSet:(UIButton *)button
+{
+    NSNumber *number = self.tableViewOffSetArray[button.tag];
+    CGPoint offSet = CGPointMake(0, 1.0*number.floatValue);
+    [self.tableView setContentOffset:offSet];
 }
 
 - (void)domakeArr
@@ -81,13 +111,16 @@
     }
     
     NSMutableArray *newArray = [[NSMutableArray alloc] init];
-        NSArray *str = @[@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",
-                         @"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",
-                         @"Y",@"Z"];
+    NSArray *str = @[@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",
+                    @"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",
+                    @"Y",@"Z"];
     
     for(int i = 0; i < CharacterNumber; i++)
     {
         [newArray insertObject:str[i] atIndex:newArray.count];
+        int num = ((int)newArray.count-1) * CellHeight;
+        NSNumber *number = [NSNumber numberWithInt:num];
+        [self.tableViewOffSetArray addObject:number];
         for(int j = 0; j < len[i]; j++)
         {
             [newArray insertObject:_arr[ch[i][j]] atIndex:newArray.count];
@@ -164,10 +197,15 @@
     {
         cell.textLabel.text = _arr[indexPath.row];
     }
+    cell.textLabel.textColor = [UIColor blackColor];
     cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CellHeight;
+}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
