@@ -8,6 +8,13 @@
 
 #import "CitySelectorViewController.h"
 #import "MyApp.h"
+
+#define ScreenHeight [UIScreen mainScreen].bounds.size.height
+#define ScreenWidth [UIScreen mainScreen].bounds.size.width
+#define MAXSizeOfOneSection 10005
+#define SearchBarHeight 40
+#define CharacterNumber 26
+
 @interface CitySelectorViewcontroller()<UISearchBarDelegate,
     UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
@@ -17,7 +24,6 @@
 @property (nonatomic ,retain) NSMutableArray *arr;
 @property (nonatomic ,retain) NSMutableArray *resultArr;
 @property (nonatomic ,assign) BOOL isSearch;//判断是否在搜索
-@property (nonatomic ,retain) NSMutableArray *searhList;
 
 @end
 
@@ -32,14 +38,13 @@
     {
         self.view.backgroundColor = [UIColor clearColor];
         [self domakeArr];
-        [self initSearchList];
     
-        _searchBar = [[MiSearchBar alloc] initWithFrame:CGRectMake(0,  0, self.view.bounds.size.width, 40) placeholder:@"搜索"];
+        _searchBar = [[MiSearchBar alloc] initWithFrame:CGRectMake(0,  0, self.view.bounds.size.width, SearchBarHeight) placeholder:@"搜索"];
         _searchBar.delegate = self;
         _searchBar.tintColor = [UIColor clearColor];
         [self.view addSubview:_searchBar];
         
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.searchBar.frame.origin.y+self.searchBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height-80) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.searchBar.frame.origin.y+self.searchBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height-SearchBarHeight) style:UITableViewStylePlain];
         _tableView.delegate  =self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [[UIView alloc] init];
@@ -50,8 +55,6 @@
         
         _tableView.backgroundView = imgView;
         _tableView.backgroundColor = [UIColor clearColor];
-        for(int i = 0;i < 26; i++)
-            [_tableView addSubview:self.searhList[i]];
         
         [self.view addSubview:_tableView];
         _resultArr = [[NSMutableArray alloc]init];
@@ -60,41 +63,20 @@
     return self;
 }
 
-- (void)initSearchList
-{
-    int posx = self.view.frame.size.width - 50;
-    int  posy = 60;
-    int gap = self.view.frame.size.height - 120;
-    gap /= 26;
-    NSArray *str = @[@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",
-                            @"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",
-                            @"Y",@"Z"];
-    for(int i=0; i < 26; i++)
-    {
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(posx, posy, gap, gap)];
-        posy += gap;
-        [btn setBackgroundColor:[UIColor grayColor]];
-        [btn setTitle:str[i] forState:UIControlStateNormal];
-        [self.searhList insertObject:btn atIndex:i];
-        
-    }
-    
-}
-
 - (void)domakeArr
 {
     NSDictionary *mySuscriptionsDictionary = [[NSUserDefaults standardUserDefaults] objectForKey:@"cityToCodeMap"];
     self.arr = [[NSMutableArray alloc] init];
     
-    static int ch[26][10005];
-    int len[26];
-    for(int i = 0; i < 26; i++)len[i] = 0;
+    static int ch[CharacterNumber][MAXSizeOfOneSection];
+    int len[CharacterNumber];
+    for(int i = 0; i < CharacterNumber; i++)len[i] = 0;
     for(id key in mySuscriptionsDictionary)
     {
         [_arr insertObject:key atIndex:_arr.count];
         int ch1 = [self toint:([[self pinyin:key] characterAtIndex:0]) ];
         if(ch1 == -1)continue;
-        ch[ch1][len[ch1]] = (int)_arr.count-1;
+        ch[ch1][len[ch1]] = (int)_arr.count - 1;
         len[ch1]++;
     }
     
@@ -103,7 +85,7 @@
                          @"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",
                          @"Y",@"Z"];
     
-    for(int i = 0; i < 26; i++)
+    for(int i = 0; i < CharacterNumber; i++)
     {
         [newArray insertObject:str[i] atIndex:newArray.count];
         for(int j = 0; j < len[i]; j++)
@@ -123,7 +105,6 @@
     if (string == nil || string.length == 0) {
         return @"";
     }
-    string = [string substringToIndex:2];
     NSMutableString *result = [NSMutableString stringWithString:string];
     
     //先转换为带声调的拼音
@@ -194,14 +175,14 @@
     MyApp * app = [MyApp sharedInstance];
     if(self.isSearch)
     {
-        if(_resultArr[indexPath.row]!=nil&&[_resultArr[indexPath.row] length]!=1)
+        if(_resultArr[indexPath.row] != nil && [_resultArr[indexPath.row] length] != 1)
         {
             [app.mySuscriptions insertObject:app.cityToCodeMap[_resultArr[indexPath.row]] atIndex:0];
         }
     }
     else
     {
-        if(_arr[indexPath.row]!=nil&&[_arr[indexPath.row] length]!=1)
+        if(_arr[indexPath.row] != nil && [_arr[indexPath.row] length] != 1)
         {
             [app.mySuscriptions insertObject:app.cityToCodeMap[_arr[indexPath.row]] atIndex:0];
         }

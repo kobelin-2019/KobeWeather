@@ -16,6 +16,12 @@
 #import "UserDefaultStorageService.h"
 #import "RandomColor.h"
 
+#define ScreenHeight [UIScreen mainScreen].bounds.size.height
+#define ScreenWidth [UIScreen mainScreen].bounds.size.width
+#define CardWidth 270
+#define CardHeight 360+120+50
+
+
 /*
 天气主页面：以卡片形式展示订阅的天气数据
  */
@@ -77,9 +83,10 @@
 //建立视图第一层子视图
 - (void)setUpMainViewComponents
 {
+    const int TopGapHeight = 20;
     if(!self.cardColor)self.cardColor = [[NSMutableArray alloc] init];
-    CGSize cardSize = CGSizeMake(270, 360+120+50);
-    CityForecastScrollView *cityForecastScrollView = [[CityForecastScrollView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20)];
+    CGSize cardSize = CGSizeMake(CardWidth, CardHeight);
+    CityForecastScrollView *cityForecastScrollView = [[CityForecastScrollView alloc] initWithFrame:CGRectMake(0, TopGapHeight, self.view.frame.size.width, self.view.frame.size.height - TopGapHeight)];
         [self.view addSubview:cityForecastScrollView];
         cityForecastScrollView.actualWidth = cardSize.width;
         cityForecastScrollView.actualHeight = cardSize.height;
@@ -94,7 +101,7 @@
 {
     UIButton *deleteCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x - 7 , card.frame.origin.y-12, 30, 30)];
     UIButton *flipCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 26, 26)];
-    [flipCard setImage:[UIImage imageNamed:@"reverseCard.png"] forState:UIControlStateNormal];
+    [flipCard setImage:[UIImage imageNamed:@"reverse.png"] forState:UIControlStateNormal];
     [flipCard addTarget:self action:@selector(reverseCard:) forControlEvents:UIControlEventTouchUpInside];
     flipCard.tag = i;
     [deleteCard setBackgroundImage:[UIImage imageNamed:@"chahao.png"] forState:UIControlStateNormal];
@@ -103,7 +110,7 @@
     [card addSubview:flipCard];
     
     flipCard = [[UIButton alloc] initWithFrame:CGRectMake(card.frame.origin.x + card.frame.size.width - 25-5-2-5, card.frame.origin.y-12, 26, 26)];
-    [flipCard setImage:[UIImage imageNamed:@"reverseCard.png"] forState:UIControlStateNormal];
+    [flipCard setImage:[UIImage imageNamed:@"reverse.png"] forState:UIControlStateNormal];
     [flipCard addTarget:self action:@selector(reverseCard2:) forControlEvents:UIControlEventTouchUpInside];
     flipCard.tag = i;
     [reverseView addSubview:flipCard];
@@ -204,7 +211,7 @@
     [self setUpMainViewComponents];
     CityForecastScrollView *cityForecastScrollView = self.scrollView;
     NSInteger cardCount = self.suscriptions.count;
-    CGSize cardSize = CGSizeMake(270, 360+120+50);
+    CGSize cardSize = CGSizeMake(CardWidth, CardHeight);
     
     for (int i = 0; i < cardCount; i++)
     {
@@ -212,7 +219,7 @@
         {
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(i * cardSize.width, 0, cardSize.width, cardSize.height)];
             
-            self.refreshBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 10,30+25 , 20, 20)];
+            self.refreshBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 10,55 , 20, 20)];
             [self.refreshBtn setImage:[UIImage imageNamed:@"shuaxin.png"] forState:UIControlStateNormal];
             [self.refreshBtn addTarget:self action:@selector(refreshAnimation:) forControlEvents:UIControlEventTouchUpInside];
             [self.view addSubview:self.refreshBtn];
@@ -243,94 +250,9 @@
             WeatherInfoModel *weatherInfoModel = [[WeatherInfoModel alloc] init];
             weatherInfoModel = [JsonDecoder decodeJson:app.codeToCityMap[self.suscriptions[i]]];
             
+            UIView *innerView = [[UIView alloc] initWithFrame:CGRectInset(card.bounds, 10, 10)];
             [self setUpReverseForecastView:reverseView WeatherInfo:weatherInfoModel];
-            
-            NSString *date = weatherInfoModel.date ? weatherInfoModel.date : @"";
-            NSString *cityName = weatherInfoModel.cityName ? weatherInfoModel.cityName : @"";
-            NSString *updateTime = weatherInfoModel.updateTime ? weatherInfoModel.updateTime : @"";
-            NSString *temperature = weatherInfoModel.temperature ? weatherInfoModel.temperature : @"";
-            NSString *highest = weatherInfoModel.highest ? weatherInfoModel.highest : @"";
-            NSString *lowest = weatherInfoModel.lowest ? weatherInfoModel.lowest : @"";
-            NSString *type = weatherInfoModel.type ? weatherInfoModel.type : @"";
-            NSString *notice = weatherInfoModel.notice ? weatherInfoModel.notice : @"";
-            
-            UILabel *innerView = [[UILabel alloc] initWithFrame:CGRectInset(card.bounds ,20, 20)];
-            
-            int posX = innerView.frame.origin.x;
-            int posY = innerView.frame.origin.y;
-            UILabel *labelCityName = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5+50, innerView.frame.size.width/2 - 20, 30)];
-            labelCityName.text = cityName;
-            [labelCityName setFont:[UIFont systemFontOfSize:25]];
-            labelCityName.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:labelCityName];
-            
-            UILabel *labelType = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY+5+50,innerView.frame.size.width/2 -20 , 30)];
-            labelType.text = type;
-            [labelType setFont:[UIFont systemFontOfSize:25]];
-            [card addSubview:labelType];
-            
-            posY += 50;
-            UILabel *labeltemperature = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + 20, posY + 5, innerView.frame.size.width/2 , card.frame.size.height - 350)];
-            labeltemperature.text = temperature;
-            [labeltemperature setFont:[UIFont systemFontOfSize:70]];
-            labeltemperature.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:labeltemperature];
-
-            UILabel *labelCircleIcon = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2 - 15, posY + 5 - 17, innerView.frame.size.width/2 - 20, card.frame.size.height - 400)];
-            labelCircleIcon.text = @"。";
-            [labelCircleIcon setFont:[UIFont systemFontOfSize:40]];
-            [card addSubview:labelCircleIcon];
-
-            UILabel *labelTemperatureSign = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, innerView.frame.size.width/2 - 20, card.frame.size.height - 380)];
-            labelTemperatureSign.text = @"C";
-            [labelTemperatureSign setFont:[UIFont systemFontOfSize:40]];
-            [card addSubview:labelTemperatureSign];
-
-            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX+40, labelTemperatureSign.frame.origin.y + labelTemperatureSign.frame.size.height , card.frame.size.width - 2*(posX +40) , 120)];
-            [card addSubview:imgView];
-            UIImage *weatherIcon = nil;
-            weatherIcon = [self getWeatherIconWithType:type];
-            imgView.image = weatherIcon;
-
-            posY += card.frame.size.height -350 + 150;
-            UILabel *lowestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 , posY + 5, innerView.frame.size.width/2 - 20, 40)];
-            lowestLabel.text = lowest;
-            [lowestLabel setFont:[UIFont systemFontOfSize:15]];
-            lowestLabel.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:lowestLabel];
-            
-            UILabel *highestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, innerView.frame.size.width/2 - 20, 40)];
-            highestLabel.text = highest;
-            [highestLabel setFont:[UIFont systemFontOfSize:15]];
-            highestLabel.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:highestLabel];
-            
-            posY =card.frame.origin.y + card.frame.size.height - 180;
-            UILabel *noticeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width - 10, 30)];
-            noticeLabel.text = notice;
-            [noticeLabel setFont:[UIFont systemFontOfSize:16]];
-            noticeLabel.adjustsFontSizeToFitWidth = YES;
-            [card addSubview:noticeLabel];
-            
-            posY = card.frame.origin.y + card.frame.size.height - 90;
-
-            UILabel *updateTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width - 20, 30)];
-            updateTimeLabel.text = @"数据更新于：";
-            [updateTimeLabel setFont:[UIFont systemFontOfSize:15]];
-            [card addSubview:updateTimeLabel];
-
-            posY += 30;
-            UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width/2 - 20, 30)];
-            dateLabel.text = date;
-            [dateLabel setFont:[UIFont systemFontOfSize:15]];
-            [card addSubview:dateLabel];
-
-            posX += card.frame.size.width/2;
-            UILabel *label6 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, innerView.frame.size.width/2 - 20, 30)];
-            label6.text = updateTime;
-            [label6 setFont:[UIFont systemFontOfSize:14]];
-            [card addSubview:label6];
-            
+            [self setUpCardInnerView:weatherInfoModel CardView:card InnerView:innerView];
             [self setUpCardElements:card ReverseView:reverseView CardNumber:i];
         }
     }
@@ -405,8 +327,96 @@
     [self.reverseCardViews removeObjectAtIndex:button.tag];
 }
 
+//根据天气数据模型在卡片上显示数据
+- (void)setUpCardInnerView:(WeatherInfoModel *)weatherInfoModel CardView:(UIView *)card InnerView:(UIView *)innerView
+{
+    NSString *date = weatherInfoModel.date ? weatherInfoModel.date : @"";
+    NSString *cityName = weatherInfoModel.cityName ? weatherInfoModel.cityName : @"";
+    NSString *updateTime = weatherInfoModel.updateTime ? weatherInfoModel.updateTime : @"";
+    NSString *temperature = weatherInfoModel.temperature ? weatherInfoModel.temperature : @"";
+    NSString *highest = weatherInfoModel.highest ? weatherInfoModel.highest : @"";
+    NSString *lowest = weatherInfoModel.lowest ? weatherInfoModel.lowest : @"";
+    NSString *type = weatherInfoModel.type ? weatherInfoModel.type : @"";
+    NSString *notice = weatherInfoModel.notice ? weatherInfoModel.notice : @"";
+    
+    int posX = innerView.frame.origin.x;
+    int posY = innerView.frame.origin.y;
+    UILabel *labelCityName = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5+50, card.frame.size.width/2 - 20, 30)];
+    labelCityName.text = cityName;
+    [labelCityName setFont:[UIFont systemFontOfSize:25]];
+    labelCityName.adjustsFontSizeToFitWidth = YES;
+    [card addSubview:labelCityName];
+    
+    UILabel *labelType = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY+5+50,card.frame.size.width/2 -20 , 30)];
+    labelType.text = type;
+    [labelType setFont:[UIFont systemFontOfSize:25]];
+    [card addSubview:labelType];
+    
+    posY += 50;
+    UILabel *labeltemperature = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + 20, posY + 5, card.frame.size.width/2 , card.frame.size.height - 350)];
+    labeltemperature.text = temperature;
+    [labeltemperature setFont:[UIFont systemFontOfSize:70]];
+    labeltemperature.adjustsFontSizeToFitWidth = YES;
+    [card addSubview:labeltemperature];
 
--(void)viewWillDisappear:(BOOL)animated
+    UILabel *labelCircleIcon = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2 - 15, posY + 5 - 17, card.frame.size.width/2 - 20, card.frame.size.height - 400)];
+    labelCircleIcon.text = @"。";
+    [labelCircleIcon setFont:[UIFont systemFontOfSize:40]];
+    [card addSubview:labelCircleIcon];
+
+    UILabel *labelTemperatureSign = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, card.frame.size.width/2 - 20, card.frame.size.height - 380)];
+    labelTemperatureSign.text = @"C";
+    [labelTemperatureSign setFont:[UIFont systemFontOfSize:40]];
+    [card addSubview:labelTemperatureSign];
+
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(posX+40, labelTemperatureSign.frame.origin.y + labelTemperatureSign.frame.size.height , card.frame.size.width - 2*(posX +40) , 120)];
+    [card addSubview:imgView];
+    UIImage *weatherIcon = nil;
+    weatherIcon = [self getWeatherIconWithType:type];
+    imgView.image = weatherIcon;
+
+    posY += card.frame.size.height -350 + 150;
+    UILabel *lowestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 , posY + 5, card.frame.size.width/2 - 20, 40)];
+    lowestLabel.text = lowest;
+    [lowestLabel setFont:[UIFont systemFontOfSize:15]];
+    lowestLabel.adjustsFontSizeToFitWidth = YES;
+    [card addSubview:lowestLabel];
+    
+    UILabel *highestLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10 + card.frame.size.width/2, posY + 5, card.frame.size.width/2 - 20, 40)];
+    highestLabel.text = highest;
+    [highestLabel setFont:[UIFont systemFontOfSize:15]];
+    highestLabel.adjustsFontSizeToFitWidth = YES;
+    [card addSubview:highestLabel];
+    
+    posY =card.frame.origin.y + card.frame.size.height - 180;
+    UILabel *noticeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, card.frame.size.width - 10, 30)];
+    noticeLabel.text = notice;
+    [noticeLabel setFont:[UIFont systemFontOfSize:16]];
+    noticeLabel.adjustsFontSizeToFitWidth = YES;
+    [card addSubview:noticeLabel];
+    
+    posY = card.frame.origin.y + card.frame.size.height - 90;
+
+    UILabel *updateTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, card.frame.size.width - 20, 30)];
+    updateTimeLabel.text = @"数据更新于：";
+    [updateTimeLabel setFont:[UIFont systemFontOfSize:15]];
+    [card addSubview:updateTimeLabel];
+
+    posY += 30;
+    UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, card.frame.size.width/2 - 20, 30)];
+    dateLabel.text = date;
+    [dateLabel setFont:[UIFont systemFontOfSize:15]];
+    [card addSubview:dateLabel];
+
+    posX += card.frame.size.width/2;
+    UILabel *label6 = [[UILabel alloc] initWithFrame:CGRectMake(posX + 10, posY + 5, card.frame.size.width/2 - 20, 30)];
+    label6.text = updateTime;
+    [label6 setFont:[UIFont systemFontOfSize:14]];
+    [card addSubview:label6];
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated
 {
 
 }
